@@ -47,7 +47,7 @@ def wigRefGen(fastafile, outfile, returnStatus = False):
     while i < len(fastaSequence)-1:
         if fastaSequence[i] == 'T' and fastaSequence[i+1] == 'A':
             TACount += 1
-            entry = [i, 100]
+            entry = [i+1, 100]
             TAPositions.append(entry)
         i += 1
         continue
