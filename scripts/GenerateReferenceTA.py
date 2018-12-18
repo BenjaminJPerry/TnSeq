@@ -1,6 +1,6 @@
 # 2018 Benjamin J Perry - Attribution-NonCommercial-ShareAlike 4.0 International
 # (CC BY-NC-SA 4.0)
-# Version: 1.1.0
+# Version: 1.1.1
 # Maintainer: Benjamin J Perry
 # Email: benjamin.perry@postgrad.otago.ac.nz
 # Status: Functional
@@ -21,6 +21,7 @@ def wigRefGen(fastafile, outfile, returnStatus = False):
     :return: return list of [pos, count] of TA sites with wig header line.
     '''
 
+    print('\nComputing Reference TA .wig file for: ' + fastafile)
     inputFile = open(fastafile, 'r')
     fastaData = inputFile.read()
 
@@ -56,6 +57,9 @@ def wigRefGen(fastafile, outfile, returnStatus = False):
         TACount += 1
         entry = [fastaSequence[-1], 100]
         TAPositions.append(entry)
+    print('Reference TA .wig file computed.')
+    print('Total TA motifs found: ' + str(TACount))
+    print('Printing reference TA .wig file.')
 
     # Print out the reference .wig file
     outputFile = open(outfile, 'w')
@@ -90,3 +94,8 @@ if __name__ == '__main__':
     wigRefGen(inFile, outFile)
 
     print("Reference .wig file printed to: "+args.outputWigFile+"\n")
+
+    print('2018 Benjamin J Perry - (CC BY-NC-SA 4.0)')
+    print('Version: 1.1.1')
+    print('Email: benjamin.perry@postgrad.otago.ac.nz')
+    print('Citation: TBD\n')
