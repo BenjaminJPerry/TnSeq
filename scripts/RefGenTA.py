@@ -6,9 +6,6 @@
 # Status: Functional
 # Citation: TBD
 
-
-import argparse
-
 def wigRefGen(fastafile, outfile, returnStatus = False):
     '''
     Reads in a single fasta sequence from a file. Identifies the position of the T in ever TA motif.
