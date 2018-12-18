@@ -15,6 +15,11 @@ def wigRefGen(fastafile, outfile):
     :return: null
     '''
 
+    inputFile = open(fastafile, "r")
+
+    outputFile = open(outfile, "w")
+
+
 
 if __name__ == '__main__':
     # Parse arguments
