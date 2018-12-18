@@ -1,6 +1,6 @@
 # 2018 Benjamin J Perry - Attribution-NonCommercial-ShareAlike 4.0 International
 # (CC BY-NC-SA 4.0)
-# Version: 1.0.0
+# Version: 1.1.0
 # Maintainer: Benjamin J Perry
 # Email: benjamin.perry@postgrad.otago.ac.nz
 # Status: Functional
@@ -33,6 +33,7 @@ def wigRefGen(fastafile, outfile, returnStatus = False):
     fastaData = fastaData.splitlines()
     headerLine = fastaData.pop(0)
     headerLine = headerLine.split()[0]
+    headerLine = headerLine[1:]
 
     fastaSequence = ''
     for chunk in fastaData:
@@ -66,16 +67,26 @@ def wigRefGen(fastafile, outfile, returnStatus = False):
 
     # Check return status option and comply
     returnList = []
-    if returnStatus = True:
+    if returnStatus == True:
         returnHeader = ['variableStep chrom=' + headerLine + '\n', '']
         returnList.append(returnList)
         returnList.append(TAPositions)
         return returnList
-    elif returnStatus = False:
-        raise SystemExit(1)
+
 
 if __name__ == '__main__':
     # Parse arguments
+    import argparse
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-F", "--fastaFile", type = str, help="path to input .fasta file")
+    parser.add_argument("-O", "--outputWigFile", type = str, help="path to output .wig file to be written.")
+    args = parser.parse_args()
+
+    inFile = args.fastaFile
+    outFile = args.outputWigFile
 
     # Compute Wig Reference Track
     wigRefGen(inFile, outFile)
+
+    print("Reference .wig file printed to: "+args.outputWigFile+"\n")
