@@ -49,6 +49,7 @@ def wigRefGen(fastafile, outfile, returnStatus = False):
             TAPositions.append(entry)
         i += 1
         continue
+
     # Check for contig spanning TA site
     if fastaSequence[-1] == 'T' and fastaSequence[0] == 'A':
         TACount += 1
@@ -67,12 +68,10 @@ def wigRefGen(fastafile, outfile, returnStatus = False):
     outputFile.close()
 
     # Check return status option and comply
-    returnList = []
     if returnStatus == True:
-        returnHeader = ['variableStep chrom=' + headerLine + '\n', '']
-        returnList.append(returnList)
-        returnList.append(TAPositions)
-        return returnList
+        #returnHeader = ['variableStep chrom=' + headerLine + '\n', '']
+        #TAPositions.insert(0, returnHeader)
+        return TAPositions
 
 
 if __name__ == '__main__':

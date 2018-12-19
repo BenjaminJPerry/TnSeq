@@ -85,7 +85,7 @@ def bedfile_to_read_pos(bedfile):
 def count_reads(read_pos):
     ''' (list[]) - > wig[][]
 
-    Reads in a list of position data from BedfileToReadPos(). Counts the number of
+    Reads in a list of position data from bedFile_to_read_pos(). Counts the number of
     repeats that occur at a position (i.e. representing the read depth at that position)
     and outputs a 2D list with list[position][read_depth].
 
