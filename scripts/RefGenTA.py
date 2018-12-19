@@ -68,7 +68,7 @@ def wigRefGen(fastafile, outfile, returnStatus = False):
     outputFile.close()
 
     # Check return status option and comply
-    if returnStatus == True:
+    if returnStatus == True: # TODO Validate returned referenceWig is compatible with WigScripts.py
         #returnHeader = ['variableStep chrom=' + headerLine + '\n', '']
         #TAPositions.insert(0, returnHeader)
         return TAPositions

@@ -6,7 +6,7 @@
 # Status: Dev
 # Citation: TBD
 
-def bedfileToTntags(bedfile):
+def bedfileToTntags(bedfile): # TODO Validate Function if Working
     ''' ('path/to/bedfile.bed') -> tntagsList[]
 
     Opens, reads, and parses a bedfile given path to the file.
@@ -47,7 +47,7 @@ def bedfileToTntags(bedfile):
 
     return tntagsList
 
-def updateWigList(tntagList, referenceWig):
+def updateWigList(tntagList, referenceWig): # TODO Validate Function if Working
     '''(tntagList[], referenceWigList[][]) -> updatedWigList[][]
 
     Accepts a list of tn-tag positions and a reference .wig list. Sums unique tn-tag start positions and

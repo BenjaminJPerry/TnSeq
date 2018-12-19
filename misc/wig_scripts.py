@@ -82,7 +82,7 @@ def bedfile_to_read_pos(bedfile):
     
     return reads
     
-def count_reads(read_pos):
+def count_reads(read_pos): # Made obsolete because of collections.Counter() object
     ''' (list[]) - > wig[][]
 
     Reads in a list of position data from bedFile_to_read_pos(). Counts the number of
@@ -108,7 +108,7 @@ def count_reads(read_pos):
 
     return output
 
-def wig_out(outfile, data):
+def wig_out(outfile, data): # Built into wig file related functions to make shell pipelines easier via passing path directly
     ''' (data[][] -> .wig)
 
     Takes an outfile stream and a wig[][] data list as arguements and prints the data into
@@ -124,7 +124,7 @@ def wig_out(outfile, data):
 
     print "Data printed to:" + str(outfile)
     
-def parse_bed(infile, directory):
+def parseBedfile(infile, directory): # TODO Need to update function to have generalized solution to multipartite genomes.
     ''' (infile, directory) -> Print to parsed Output Files in directory
 
     Reads a bedfile, parses the data based on the chrom identifier.
@@ -200,7 +200,7 @@ def parse_bed(infile, directory):
     f84.close()
     err.close()
 
-def process_bedfile_for_HMM(infile1, infile2, outfile1):
+def process_bedfile_for_HMM(infile1, infile2, outfile1): # Made obsolete because of collections.Counter() object
     ''' (total_TA_pos.wig, TnSeq_read_pos.bedfile, tnseq_data.wig) -> write to tnseq_data.wig
 
     This program reads in a .wig file of the 'TA' positions in the Rlv3841 replicon in question,
