@@ -86,17 +86,21 @@ def wigPipe(fastafile, bedfile, wigOutfile):
     referenceWig = RefGenTA.wigRefGen(fastafile, printStatus=False)
     printHeader = referenceWig.pop(0)
     # Transposon insertion counts from the bedfile
-    print('Processing tntag insertions bedfile.')
+    print('\nProcessing tntag insertions bedfile.')
     tnCounts = WigScripts.bedfileToTntags(bedfile)
 
     # Make Update tnCount wig track
-    print('Creating treatment specific tntag wig track.')
+    print('\nCreating treatment specific tntag wig track.')
     treatmentWig = WigScripts.updateWigList(tnCounts, referenceWig)
 
     wigPrint = open(wigOutfile, 'w')
-    print('Writing treatment wig file to: ' + str(wigPrint))
-    wigPrint.write(printHeader)
+    print('\nWriting treatment wig file to: ' + str(wigPrint))
+    wigPrint.write(str(printHeader[0]) + '\n')
+    printReadsCount=0
     for line in treatmentWig:
         wigPrint.write(str(line[0]) + '\t' + str(line[1]) + '\n')
+        printReadsCount += line[1]
     wigPrint.close()
+    print('\nTotal reads printed to .wig file: ' + str(printReadsCount))
+
     raise SystemExit(0)

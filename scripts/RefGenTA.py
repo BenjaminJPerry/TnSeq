@@ -41,7 +41,7 @@ def wigRefGen(fastafile, outfile='', printStatus=False):
     i = 0
     TACount = 0
     TAPositions = []
-    printHeader = ['variableStep chrom=' + str(headerLine), '']
+    printHeader = ['variableStep chrom=' + str(headerLine)]
     TAPositions.append(printHeader)
 
     # Identify positions with TA Motifs
