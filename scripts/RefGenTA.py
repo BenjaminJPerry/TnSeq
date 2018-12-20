@@ -1,6 +1,6 @@
 # 2018 Benjamin J Perry - Attribution-NonCommercial-ShareAlike 4.0 International
 # (CC BY-NC-SA 4.0)
-# Version: 1.1.1
+# Version: 2.0.0
 # Maintainer: Benjamin J Perry
 # Email: benjamin.perry@postgrad.otago.ac.nz
 # Status: Functional
@@ -92,6 +92,6 @@ if __name__ == '__main__':
     print("Reference .wig file printed to: "+args.outputWigFile+"\n")
 
     print('2018 Benjamin J Perry - (CC BY-NC-SA 4.0)')
-    print('Version: 1.1.1')
+    print('Version: 2.0.0')
     print('Email: benjamin.perry@postgrad.otago.ac.nz')
     print('Citation: TBD\n')
