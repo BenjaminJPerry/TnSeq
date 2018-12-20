@@ -6,7 +6,7 @@
 # Status: Dev
 # Citation: TBD
 
-def bedfileToTntags(bedfile): # TODO Validate Function if Working
+def bedfileToTntags(bedfile):
     ''' ('path/to/bedfile.bed') -> tntagsList[]
 
     Opens, reads, and parses a bedfile given path to the file.
@@ -47,7 +47,7 @@ def bedfileToTntags(bedfile): # TODO Validate Function if Working
 
     return tntagsList
 
-def updateWigList(tntagList, referenceWig): # TODO Validate Function if Working
+def updateWigList(tntagList, referenceWig):
     '''(tntagList[], referenceWigList[][]) -> updatedWigList[][]
 
     Accepts a list of tn-tag positions and a reference .wig list. Sums unique tn-tag start positions and
@@ -63,6 +63,40 @@ def updateWigList(tntagList, referenceWig): # TODO Validate Function if Working
     # Update count for each position in referenceWig
     for siteTA in referenceWig:
         updatedEntry = []
-        updatedEntry.append(int(siteTA[0]))
-        updatedEntry.append(int(positionCounter[int(siteTA[0])]))
+        updatedEntry.append(siteTA[0])
+        updatedEntry.append(positionCounter[siteTA[0]])
         updatedWig.append(updatedEntry)
+    return updatedWig
+
+def wigPipe(fastafile, bedfile, wigOutfile):
+    ''' ("path/fastafile", "path/bedfile", "path/wigOut") -> Null; Prints output wig file for treatment.
+
+    :param fastafile: input fasta file with a single >headerLine
+    :param bedfile: tnseq data bedfile derived from read alignment
+    :return: null
+
+    Takes a fasta file, and a corresponding bedfile of tntag alignments, and return a wig file of the tntag counts.
+    Reference wig files can be generated using RefGenTA.wigRefGen()
+
+    '''
+    import RefGenTA
+    import WigScripts
+    # Generate the reference wig counts list
+    print('Generating reference wig position list.')
+    referenceWig = RefGenTA.wigRefGen(fastafile, printStatus=False)
+    printHeader = referenceWig.pop(0)
+    # Transposon insertion counts from the bedfile
+    print('Processing tntag insertions bedfile.')
+    tnCounts = WigScripts.bedfileToTntags(bedfile)
+
+    # Make Update tnCount wig track
+    print('Creating treatment specific tntag wig track.')
+    treatmentWig = WigScripts.updateWigList(tnCounts, referenceWig)
+
+    wigPrint = open(wigOutfile, 'w')
+    print('Writing treatment wig file to: ' + str(wigPrint))
+    wigPrint.write(printHeader)
+    for line in treatmentWig:
+        wigPrint.write(str(line[0]) + '\t' + str(line[1]) + '\n')
+    wigPrint.close()
+    raise SystemExit(0)

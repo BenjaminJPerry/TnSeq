@@ -6,7 +6,7 @@
 # Status: Functional
 # Citation: TBD
 
-def wigRefGen(fastafile, outfile, returnStatus = False):
+def wigRefGen(fastafile, outfile='', printStatus=False):
     '''
     Reads in a single fasta sequence from a file. Identifies the position of the T in ever TA motif.
     Returns a wig files with every TA site and the count column set to 100.
@@ -14,7 +14,7 @@ def wigRefGen(fastafile, outfile, returnStatus = False):
 
     :param fastafile: String; input fasta file.
     :param outfile: String; outfile to write reference 'TA' wig track to.
-    :param returnStatus: Boolean; if True returns Ref wig file object with function call.
+    :param printStatus: Boolean; if True prints Ref wig file object with function call.
     :return: return list of [pos, count] of TA sites with wig header line.
     '''
 
@@ -41,6 +41,9 @@ def wigRefGen(fastafile, outfile, returnStatus = False):
     i = 0
     TACount = 0
     TAPositions = []
+    printHeader = ['variableStep chrom=' + str(headerLine), '']
+    TAPositions.append(printHeader)
+
     # Identify positions with TA Motifs
     while i < len(fastaSequence)-1:
         if fastaSequence[i] == 'T' and fastaSequence[i+1] == 'A':
@@ -55,24 +58,21 @@ def wigRefGen(fastafile, outfile, returnStatus = False):
         TACount += 1
         entry = [fastaSequence[-1], 100]
         TAPositions.append(entry)
-    print('Reference TA .wig file computed.')
+
     print('Total TA motifs found: ' + str(TACount))
-    print('Printing reference TA .wig file.')
 
-    # Print out the reference .wig file
-    outputFile = open(outfile, 'w')
-    # Print out the .wig file to outfile
-    outputFile.write('variableStep chrom=' + headerLine + '\n')
-    for line in TAPositions:
-        outputFile.write(str(line[0]) + '\t' + str(line[1]) + '\n')
-    outputFile.close()
-
-    # Check return status option and comply
-    if returnStatus == True: # TODO Validate returned referenceWig is compatible with WigScripts.py
-        #returnHeader = ['variableStep chrom=' + headerLine + '\n', '']
-        #TAPositions.insert(0, returnHeader)
+    # Check print status option and comply
+    if not printStatus:
         return TAPositions
 
+    if printStatus:
+        print('Reference TA .wig file computed.')
+        print('Printing reference TA .wig file.')
+        outputFile = open(outfile, 'w')
+        # Print out the .wig file to outfile
+        for line in TAPositions:
+            outputFile.write(str(line[0]) + '\t' + str(line[1]) + '\n')
+        outputFile.close()
 
 if __name__ == '__main__':
     # Parse arguments
@@ -87,7 +87,7 @@ if __name__ == '__main__':
     outFile = args.outputWigFile
 
     # Compute Wig Reference Track
-    wigRefGen(inFile, outFile)
+    wigRefGen(inFile, outfile=outFile, printStatus=True)
 
     print("Reference .wig file printed to: "+args.outputWigFile+"\n")
 
