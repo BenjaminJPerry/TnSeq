@@ -1,6 +1,6 @@
 # 2018 Benjamin J Perry - Attribution-NonCommercial-ShareAlike 4.0 International
 # (CC BY-NC-SA 4.0)
-# Version: 2.0.0
+# Version: 2.1.0
 # Maintainer: Benjamin J Perry
 # Email: benjamin.perry@postgrad.otago.ac.nz
 # Status: Functional
@@ -77,8 +77,14 @@ def wigRefGen(fastafile, outfile='', printStatus=False):
 if __name__ == '__main__':
     # Parse arguments
     import argparse
+    import sys
 
     parser = argparse.ArgumentParser()
+
+    if len(sys.argv[1:]) == 0:
+        parser.print_usage()
+        parser.exit()
+
     parser.add_argument("-F", "--fastaFile", type = str, help="path to input .fasta file")
     parser.add_argument("-O", "--outputWigFile", type = str, help="path to output .wig file to be written.")
     args = parser.parse_args()
@@ -92,6 +98,6 @@ if __name__ == '__main__':
     print("Reference .wig file printed to: "+args.outputWigFile+"\n")
 
     print('2018 Benjamin J Perry - (CC BY-NC-SA 4.0)')
-    print('Version: 2.0.0')
+    print('Version: 2.1.0')
     print('Email: benjamin.perry@postgrad.otago.ac.nz')
     print('Citation: TBD\n')
