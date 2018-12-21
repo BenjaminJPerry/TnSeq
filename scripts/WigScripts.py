@@ -1,6 +1,6 @@
 # 2018 Benjamin J Perry - Attribution-NonCommercial-ShareAlike 4.0 International
 # (CC BY-NC-SA 4.0)
-# Version: 0.0.1
+# Version: 2.1.0
 # Maintainer: Benjamin J Perry
 # Email: benjamin.perry@postgrad.otago.ac.nz
 # Status: Dev
@@ -104,3 +104,33 @@ def wigPipe(fastafile, bedfile, wigOutfile):
     print('\nTotal reads printed to .wig file: ' + str(printReadsCount))
 
     raise SystemExit(0)
+if __name__ == '__main__':
+    # Parse arguments
+    import argparse
+    import RefGenTA
+    import sys
+
+    parser = argparse.ArgumentParser()
+
+    if len(sys.argv[1:]) == 0:
+        parser.print_usage() # for just the usage line
+        parser.exit()
+
+    parser.add_argument("-F", "--fastaFile", type = str, help="path to input .fasta file.")
+    parser.add_argument("-B", "--bedFile", type = str, help="path to input .bed file.")
+    parser.add_argument("-O", "--outputWigFile", type = str, help="path to output .wig file to be written.")
+    args = parser.parse_args()
+
+    inFile = args.fastaFile
+    outFile = args.outputWigFile
+    bedFile = args.bedFile
+
+    # Compute Wig Reference Track
+    wigPipe(inFile, bedFile, outFile)
+
+    print("Treatment .wig file printed to: "+args.outputWigFile+"\n")
+
+    print('2018 Benjamin J Perry - (CC BY-NC-SA 4.0)')
+    print('Version: 2.1.0')
+    print('Email: benjamin.perry@postgrad.otago.ac.nz')
+    print('Citation: TBD\n')
