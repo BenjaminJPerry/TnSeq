@@ -71,7 +71,7 @@ def wigRefGen(fastafile, outfile='', printStatus=False):
         outputFile = open(outfile, 'w')
         # Print out the .wig file to outfile
         for line in TAPositions:
-            outputFile.write(str(line[0]) + '\t' + str(line[1]) + '\n')
+            outputFile.write(str(line) + '\t' + str(line[1]) + '\n') #TODO Fix the TA reference output in stand alone mode
         outputFile.close()
 
 if __name__ == '__main__':
