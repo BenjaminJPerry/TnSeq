@@ -1,19 +1,18 @@
-# Scripts and Archive for Tnseq Analysis
+#Analysis Pipeline for Tnseq Data
+This repo contains pipelines and utility scripts for analysis of mariner or Tn5 derived TnSeq data.
 
-## Description
+## essentiality/
 
-This repo contains scripts necessary to analyze and visualize TnSeq data.
++ marinerWig/ - command line python scripts for generating reference and experimental .wig files.
 
-## scripts/RefGenTA.py
++ marinerTRANSIT - src for analysis of mariner TnSeq data using various TRANSIT methods (DeJesus et al. 2015).
 
-Utility script for computing 'TA' motif reference wig files visualization.
-Also a helper script for WigScripts.py when generating .wif tracks for treatment .bed files.
++ tn5TRANSIT/ - src for analysis of Tn5 TnSeq data using TRANSIT (DeJesus et al. 2015).
 
-## scripts/WigScripts.py
++ tn5TSAS/ - src for analysis of Tn5 TnSeq data using TSAS (Burger et al. 2017).
 
-Utility script for computing treatment .wig tracks. Uses reference .fasta file used for alignment of tn-tags,
-a .bed file of the aligned tn-tags, and a for an output .wig track to be printed to.
++ tn5TraDIS/ - src for analysis of Tn5 TnSeq data using Bio-TraDIS package (Barquist et al. 2016).
 
-## Usage
+## conditionalEssentiality/
 
-Both RegGenTA.py and WigScripts.py have command line usage. use '-h' flag for help menus.
++ For analysis of conditionally essential genes by comparison of input vs output mutant pools, or through comparison of conditions.
