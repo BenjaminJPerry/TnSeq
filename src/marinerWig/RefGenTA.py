@@ -45,10 +45,10 @@ def wigRefGen(fastafile, outfile='', printStatus=False):
     TAPositions.append(printHeader)
 
     # Identify positions with TA Motifs
-    while i < len(fastaSequence)-1:
-        if fastaSequence[i] == 'T' and fastaSequence[i+1] == 'A':
+    while i < len(fastaSequence) - 1:
+        if fastaSequence[i] == 'T' and fastaSequence[i + 1] == 'A':
             TACount += 1
-            entry = [i+1, 100]
+            entry = [i + 1, 100]
             TAPositions.append(entry)
         i += 1
         continue
@@ -71,8 +71,10 @@ def wigRefGen(fastafile, outfile='', printStatus=False):
         outputFile = open(outfile, 'w')
         # Print out the .wig file to outfile
         for line in TAPositions:
-            outputFile.write(str(line) + '\t' + str(line[1]) + '\n') #TODO Fix the TA reference output in stand alone mode
+            outputFile.write(
+                str(line) + '\t' + str(line[1]) + '\n')  # TODO Fix the TA reference output in stand alone mode
         outputFile.close()
+
 
 if __name__ == '__main__':
     # Parse arguments
@@ -85,8 +87,8 @@ if __name__ == '__main__':
         parser.print_usage()
         parser.exit()
 
-    parser.add_argument("-F", "--fastaFile", type = str, help="path to input .fasta file")
-    parser.add_argument("-O", "--outputWigFile", type = str, help="path to output .wig file to be written.")
+    parser.add_argument("-F", "--fastaFile", type=str, help="path to input .fasta file")
+    parser.add_argument("-O", "--outputWigFile", type=str, help="path to output .wig file to be written.")
     args = parser.parse_args()
 
     inFile = args.fastaFile
@@ -95,7 +97,7 @@ if __name__ == '__main__':
     # Compute Wig Reference Track
     wigRefGen(inFile, outfile=outFile, printStatus=True)
 
-    print("Reference .wig file printed to: "+args.outputWigFile+"\n")
+    print("Reference .wig file printed to: " + args.outputWigFile + "\n")
 
     print('2018 Benjamin J Perry - (CC BY-NC-SA 4.0)')
     print('Version: 2.1.0')

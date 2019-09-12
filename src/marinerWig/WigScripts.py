@@ -42,8 +42,8 @@ def bedfileToTntags(bedfile):
             i += 1
         else:
             errors += 1
-    print "Reads processed " + str(i)
-    print "Errors " + str(errors)
+    print("Reads processed " + str(i))
+    print("Errors " + str(errors))
 
     return tntagsList
 
