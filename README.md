@@ -3,7 +3,9 @@ This repo contains pipelines and utility scripts for analysis of mariner or Tn5 
 
 ## essentiality/
 
-+ marinerWig/ - command line python scripts for generating reference and experimental .wig files.
++ wigMariner/ - command line python scripts for generating reference and experimental .wig files.
+
++ wigTn5/ - command line python scripts for generating Tn5 .wig files.
 
 + marinerTRANSIT - src for analysis of mariner TnSeq data using various TRANSIT methods (DeJesus et al. 2015).
 
