@@ -1,4 +1,4 @@
-#Analysis Methods for Tnseq Data
+# Analysis Methods for Tnseq Data
 This repo contains pipelines and utility scripts for analysis of mariner or Tn5 derived TnSeq data.
 
 ## essentiality/
