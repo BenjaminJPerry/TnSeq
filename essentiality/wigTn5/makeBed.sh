@@ -7,16 +7,16 @@
 
 #!/bin/bash
 
-# Overview: 
+# Overview:
 # This shell script is designed to take a directory of single ended reads, each representing the data
 # from a single Tn-Seq sequencing library and trim, align, and convert the data into useable format listed below.
-# 
+#
 # Output Files:
 # 1. sorted .bam and .bai file for loading into IGV
 # 2. bedfile of mapped reads for using in R scrip for strand separation and wig file generation
 # 3. fastqc report of trimmed reads
 # 4. log file of reads mapped to pJG714 and E. coli ST18 genome
-# 
+#
 # Synopsis or Pipeline Steps:
 # 1. cutadapt is used to remove the Tn sequences and any polyC tails which may be on the 3' end.
 # 2. bowtie2 aligns reads to pJG714 vector and save unaligned reads.
@@ -28,14 +28,17 @@
 #activate conda environment
 clear
 pwd
-printf "/n/n/n"
+printf "\n\n\n"
 
-source activate py36
+#source activate py36
 
 ###Global variables needed for analysis
-MESREF=/Users/bjp/OneDrive\ -\ University\ of\ Otago/1_TnSeqML/tnSeqExperiments/refGenomes/MESO
-ECOLIREF=/Users/bjp/OneDrive\ -\ University\ of\ Otago/1_TnSeqML/tnSeqExperiments/refGenomes/ECOLI
-PJG714REF=/Users/bjp/OneDrive\ -\ University\ of\ Otago/1_TnSeqML/tnSeqExperiments/refGenomes/PJG714
+R7AWT=~/Projects/TnSeq/ref/R7A
+R7ANS=~/Projects/TnSeq/ref/R7ANS
+ECOLIREF=~/Projects/TnSeq/ref/ECOLI
+PJG714REF=~/Projects/TnSeq/ref/PJG714
+TA1CAT=~/Projects/TnSeq/ref/TA1CAT
+TA1CON=~/Projects/TnSeq/ref/TA1CON
 
 ### Parse into separate directories for analysis
 for i in $(ls | cut -d '-' -f 1,2);
@@ -76,7 +79,8 @@ SORTBAMBAI="$SORTBAM".bai
 UNALINREADS=reads/unaligned."$i".trim.filter.fastq.gz
 BEDFILE=alignment/"$i".bed
 
-bowtie2 -x "$MESREF" -U "$JGFILTREADS" --un-gz "$UNALINREADS" | samtools view -b | samtools sort -o "$SORTBAM"
+### Alignment to the desired reference genome
+bowtie2 -x "$TA1CON" -U "$JGFILTREADS" --un-gz "$UNALINREADS" | samtools view -b | samtools sort -o "$SORTBAM"
 samtools index "$SORTBAM" "$SORTBAMBAI"
 bedtools bamtobed -i "$SORTBAM" > "$BEDFILE"
 
