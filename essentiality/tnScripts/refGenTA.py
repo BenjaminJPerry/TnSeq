@@ -7,7 +7,7 @@
 # Citation: TBD
 
 def wigRefGen(fastafile, outfile='', printStatus=False):
-    '''
+    '''(reference.fasta, output.wig, printStatus=Boolean) -> refWig[][] OR Null; print to output.wig if True
     Reads in a single fasta sequence from a file. Identifies the position of the T in ever TA motif.
     Returns a wig files with every TA site and the count column set to 100.
     Fasta header line is used to the wig config line.

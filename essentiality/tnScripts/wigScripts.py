@@ -6,11 +6,11 @@
 # Status: Dev
 # Citation: TBD
 
-def bedfileToTntags(bedfile):
+def bedfileToTntags(bedfile, tn5=False): #TODO Re-Write to Process as Readfile vs. Holding File in Memory
     ''' ('path/to/bedfile.bed') -> tntagsList[]
 
     Opens, reads, and parses a bedfile given path to the file.
-    Returns a list, each element the genomic coordinate of tntag 'T' start.
+    Returns a list, each element the genomic coordinate of tntag start.
     This script takes into account the strand the read was mapped to.
 
     '''
@@ -29,7 +29,7 @@ def bedfileToTntags(bedfile):
     tntagsList = []
     i = 0
     errors = 0
-    for line in bedfileData:
+    for line in bedfileData: #TODO update to check Tn5 Condition to implement the 9 bp offset
         if str(line[5]) == '+':
             position = int(line[1])
             position = position + 1
@@ -76,22 +76,22 @@ def wigPipe(fastafile, bedfile, wigOutfile):
     :return: null
 
     Takes a fasta file, and a corresponding bedfile of tntag alignments, and return a wig file of the tntag counts.
-    Reference wig files can be generated using RefGenTA.wigRefGen()
+    Reference wig files can be generated using refGenTA.wigRefGen()
 
     '''
-    import RefGenTA
-    import WigScripts
+    import refGenTA
+    import wigScripts
     # Generate the reference wig counts list
     print('Generating reference wig position list.')
-    referenceWig = RefGenTA.wigRefGen(fastafile, printStatus=False)
-    printHeader = referenceWig.pop(0) #RefGenTA must return print header as item[0]
+    referenceWig = refGenTA.wigRefGen(fastafile, printStatus=False)
+    printHeader = referenceWig.pop(0) #refGenTA must return print header as item[0]
     # Transposon insertion counts from the bedfile
     print('\nProcessing tntag insertions bedfile.')
-    tnCounts = WigScripts.bedfileToTntags(bedfile)
+    tnCounts = wigScripts.bedfileToTntags(bedfile)
 
-    # Make Update tnCount wig track
+    # Make Update tnCount wig track #TODO Add in Stranded .wig file output files
     print('\nCreating treatment specific tntag wig track.')
-    treatmentWig = WigScripts.updateWigList(tnCounts, referenceWig)
+    treatmentWig = wigScripts.updateWigList(tnCounts, referenceWig)
 
     wigPrint = open(wigOutfile, 'w')
     print('\nWriting treatment wig file to: ' + str(wigPrint))
@@ -108,7 +108,7 @@ def wigPipe(fastafile, bedfile, wigOutfile):
 if __name__ == '__main__':
     # Parse arguments
     import argparse
-    import RefGenTA
+    import refGenTA
     import sys
 
     parser = argparse.ArgumentParser()

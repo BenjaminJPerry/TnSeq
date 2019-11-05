@@ -12,8 +12,15 @@
 # 3. Process fastq files into .sort.sam file for analysis with TSAS
 
 
-def
+def tn5RefWig(fastafile):
+    '''(reference.fasta) -> tn5Wig[pos][count = 0]
+    :param fastafile: Input reference fasta file.
+    :return: list[][] of [pos][count], with count = 0.
+    '''
+    pass
 
+def tn5WigUpdate(fastafile, bedfile, output):
+    pass
 
 if __name__ == "__main__":
     import argparse
