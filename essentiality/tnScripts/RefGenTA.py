@@ -70,9 +70,12 @@ def wigRefGen(fastafile, outfile='', printStatus=False):
         print('Printing reference TA .wig file.')
         outputFile = open(outfile, 'w')
         # Print out the .wig file to outfile
+        printHeader = TAPositions.pop(0)
+        printHeader = str(printHeader[0])
+        outputFile.write(printHeader + '\n')
         for line in TAPositions:
             outputFile.write(
-                str(line) + '\t' + str(line[1]) + '\n')  # TODO Fix the TA reference output in stand alone mode
+                str(line[0]) + '\t' + str(line[1]) + '\n')
         outputFile.close()
 
 
@@ -87,7 +90,7 @@ if __name__ == '__main__':
         parser.print_usage()
         parser.exit()
 
-    parser.add_argument("-F", "--fastaFile", type=str, help="path to input .fasta file")
+    parser.add_argument("-F", "--fastaFile", type=str, help="path to input .fasta file.")
     parser.add_argument("-O", "--outputWigFile", type=str, help="path to output .wig file to be written.")
     args = parser.parse_args()
 

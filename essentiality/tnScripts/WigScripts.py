@@ -84,7 +84,7 @@ def wigPipe(fastafile, bedfile, wigOutfile):
     # Generate the reference wig counts list
     print('Generating reference wig position list.')
     referenceWig = RefGenTA.wigRefGen(fastafile, printStatus=False)
-    printHeader = referenceWig.pop(0)
+    printHeader = referenceWig.pop(0) #RefGenTA must return print header as item[0]
     # Transposon insertion counts from the bedfile
     print('\nProcessing tntag insertions bedfile.')
     tnCounts = WigScripts.bedfileToTntags(bedfile)
@@ -104,6 +104,7 @@ def wigPipe(fastafile, bedfile, wigOutfile):
     print('\nTotal reads printed to .wig file: ' + str(printReadsCount))
 
     raise SystemExit(0)
+
 if __name__ == '__main__':
     # Parse arguments
     import argparse
