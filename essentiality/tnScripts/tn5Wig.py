@@ -7,10 +7,7 @@
 # Citation: TBD
 
 # Description:
-# 1. Process fastq files into .wig files for use with TRANSIT
-# 2. Process fastq files into .wig files for viewing in IGV (Stranded and Total)
-# 3. Process fastq files into .sort.sam file for analysis with TSAS
-
+# Python module for handling Tn5 related Tn-seq data.
 
 def tn5RefWig(fastafile):
     '''(reference.fasta) -> tn5Wig[pos][count = 0]

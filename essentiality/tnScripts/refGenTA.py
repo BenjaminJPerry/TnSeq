@@ -1,4 +1,4 @@
-# 2018 Benjamin J Perry - Attribution-NonCommercial-ShareAlike 4.0 International
+# 2019 Benjamin J Perry - Attribution-NonCommercial-ShareAlike 4.0 International
 # (CC BY-NC-SA 4.0)
 # Version: 2.1.0
 # Maintainer: Benjamin J Perry
@@ -17,6 +17,7 @@ def wigRefGen(fastafile, outfile='', printStatus=False):
     :param printStatus: Boolean; if True prints Ref wig file object with function call.
     :return: return list of [pos, count] of TA sites with wig header line.
     '''
+    #TODO Implement Checks for multi-fasta inputs
 
     print('\nComputing Reference TA .wig file for: ' + fastafile)
     inputFile = open(fastafile, 'r')

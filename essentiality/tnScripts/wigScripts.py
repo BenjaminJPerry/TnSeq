@@ -1,4 +1,4 @@
-# 2018 Benjamin J Perry - Attribution-NonCommercial-ShareAlike 4.0 International
+# 2019 Benjamin J Perry - Attribution-NonCommercial-ShareAlike 4.0 International
 # (CC BY-NC-SA 4.0)
 # Version: 2.1.0
 # Maintainer: Benjamin J Perry
