@@ -33,23 +33,19 @@ printf "\n\n\n"
 #source activate py36
 
 ###Global variables needed for analysis
-R7AWT=~/Projects/TnSeq/ref/R7A
+R7AWT=~/ref/R7A
 R7ANS=~/Projects/TnSeq/ref/R7ANS
-ECOLIREF=~/Projects/TnSeq/ref/ECOLI
-PJG714REF=~/Projects/TnSeq/ref/PJG714
-TA1CAT=~/Projects/TnSeq/ref/TA1CAT
+ECOLIREF=~/ref/ECOLI
+PJG714REF=~/ref/PJG714
+TA1CAT=/home/ronson/Projects/TnSeq/ref/TA1CAT
 TA1CON=~/Projects/TnSeq/ref/TA1CON
 
-### Parse into separate directories for analysis
-for i in $(ls | cut -d '-' -f 1,2);
+###	Loop through each directory
+for i in $(ls | cut -d '.' -f 1);
 do
+
 mkdir "$i"
 mv "$i"*.gz "$i"
-done
-
-###	Loop through each directory
-for i in $(ls);
-do
 
 cd $i
 # Working in Sample root dir
@@ -57,9 +53,11 @@ mkdir reads
 mv "$i"*.gz reads
 READS=reads/"$(ls reads)"
 
+printf "\n\n\n"
+printf "Trimming Reads...\n\n\n"
 # Trim Tn5 ME and polyC; truncate reads at 50 bp
 TRIMREADS=reads/"$i".trim.fastq.gz
-cutadapt  -g AGATGTGTATAAGAGACAG -l 50 -m 25 --discard-untrimmed -o "$TRIMREADS" "$READS" > >(tee -i reads/cutadapt.log)
+cutadapt  -j 12 -g TGTGTATAAGAGACAG -l 50 -m 25 -e 0.2 --discard-untrimmed -o "$TRIMREADS" "$READS" > >(tee -i reads/"$i".cutadapt.log)
 
 ### Filter pJG714 reads from data
 mkdir filter
@@ -68,7 +66,10 @@ JGSORTBAM=filter/pJG714."$i".sort.bam
 JGSORTBAMBAI="$JGSORTBAM".bai
 JGFILTREADS=reads/"$i".trim.filter.fastq.gz
 
-bowtie2 -x "$PJG714REF" -U "$TRIMREADS" --un-gz "$JGFILTREADS" | samtools view -b | samtools sort -o "$JGSORTBAM"
+printf "\n\n\n"
+printf "Aligning Reads to pJG714 to Filter...\n\n\n"
+
+bowtie2 -p 12 --fast -x "$PJG714REF" -U "$TRIMREADS" --un-gz "$JGFILTREADS" | samtools view -b | samtools sort -o "$JGSORTBAM"
 samtools index "$JGSORTBAM" "$JGSORTBAMBAI"
 
 ### Align Reads to reference genome
@@ -79,8 +80,11 @@ SORTBAMBAI="$SORTBAM".bai
 UNALINREADS=reads/unaligned."$i".trim.filter.fastq.gz
 BEDFILE=alignment/"$i".bed
 
+printf "\n\n\n"
+printf "Aligning Reads to R7A Genome...\n\n\n"
+
 ### Alignment to the desired reference genome
-bowtie2 -x "$TA1CON" -U "$JGFILTREADS" --un-gz "$UNALINREADS" | samtools view -b | samtools sort -o "$SORTBAM"
+bowtie2 -p 12 --very-sensitive -x "$R7AWT" -U "$JGFILTREADS" --no-unal --un-gz "$UNALINREADS" | samtools view -b | samtools sort -o "$SORTBAM"
 samtools index "$SORTBAM" "$SORTBAMBAI"
 bedtools bamtobed -i "$SORTBAM" > "$BEDFILE"
 
@@ -91,8 +95,13 @@ CONBAM=contaminants/ecoli."$i".sort.bam
 CONBAMBAI="$CONBAM".bai
 MYSTYREADS=contaminants/mystery.reads.fastq.gz
 
-bowtie2 -x "$ECOLIREF" -U "$UNALINREADS" --un-gz "$MYSTYREADS" | samtools view -b | samtools sort -o "$CONBAM"
+printf "\n\n\n"
+printf "Aligning Remaining Reads to E. coli K12...\n\n\n"
+
+bowtie2 -p 12 --fast -x "$ECOLIREF" -U "$UNALINREADS" --un-gz "$MYSTYREADS" | samtools view -b | samtools sort -o "$CONBAM"
 samtools index "$CONBAM" "$CONBAMBAI"
+
+#python /home/ronson/Projects/TnSeq/essentiality/tnScripts/wigScripts.py -F /home/ronson/Projects/TnSeq/ref/TA1.CAT.fasta -B "$BEDFILE" -O "$i".tn5.wig -Tn5
 
 cd ..
 
