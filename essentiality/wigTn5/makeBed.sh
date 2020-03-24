@@ -84,7 +84,7 @@ printf "\n\n\n"
 printf "Aligning Reads to R7A Genome...\n\n\n"
 
 ### Alignment to the desired reference genome
-bowtie2 -p 12 --very-sensitive -x "$R7AWT" -U "$JGFILTREADS" --no-unal --un-gz "$UNALINREADS" | samtools view -q 30 -b | samtools sort -o "$SORTBAM"
+bowtie2 -p 12 --sensitive -x "$R7AWT" -U "$JGFILTREADS" --no-unal --un-gz "$UNALINREADS" | samtools view -q 30 -b | samtools sort -o "$SORTBAM"
 samtools index "$SORTBAM" "$SORTBAMBAI"
 bedtools bamtobed -i "$SORTBAM" > "$BEDFILE"
 
