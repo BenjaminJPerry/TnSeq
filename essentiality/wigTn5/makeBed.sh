@@ -69,7 +69,7 @@ JGFILTREADS=reads/"$i".trim.filter.fastq.gz
 printf "\n\n\n"
 printf "Aligning Reads to pJG714 to Filter...\n\n\n"
 
-bowtie2 -p 12 --fast -x "$PJG714REF" -U "$TRIMREADS" --un-gz "$JGFILTREADS" | samtools view -b | samtools sort -o "$JGSORTBAM"
+bowtie2 -p 12 --fast -x "$PJG714REF" -U "$TRIMREADS" --un-gz "$JGFILTREADS" | samtools view -q 30 -b | samtools sort -o "$JGSORTBAM"
 samtools index "$JGSORTBAM" "$JGSORTBAMBAI"
 
 ### Align Reads to reference genome
@@ -98,7 +98,7 @@ MYSTYREADS=contaminants/mystery.reads.fastq.gz
 printf "\n\n\n"
 printf "Aligning Remaining Reads to E. coli K12...\n\n\n"
 
-bowtie2 -p 12 --fast -x "$ECOLIREF" -U "$UNALINREADS" --un-gz "$MYSTYREADS" | samtools view -b | samtools sort -o "$CONBAM"
+bowtie2 -p 12 --fast -x "$ECOLIREF" -U "$UNALINREADS" --un-gz "$MYSTYREADS" | samtools view -q 30 -b | samtools sort -o "$CONBAM"
 samtools index "$CONBAM" "$CONBAMBAI"
 
 #python /home/ronson/Projects/TnSeq/essentiality/tnScripts/wigScripts.py -F /home/ronson/Projects/TnSeq/ref/TA1.CAT.fasta -B "$BEDFILE" -O "$i".tn5.wig -Tn5
