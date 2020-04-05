@@ -1,6 +1,6 @@
-# 2019 Benjamin J Perry - Attribution-NonCommercial-ShareAlike 4.0 International
+# 2020 Benjamin J Perry - Attribution-NonCommercial-ShareAlike 4.0 International
 # (CC BY-NC-SA 4.0)
-# Version: 0.1.0
+# Version: 2.3.0
 # Maintainer: Benjamin J Perry
 # Email: benjamin.perry@postgrad.otago.ac.nz
 # Status: Dev
@@ -11,21 +11,21 @@
 
 def tn5RefWig(fastafile):
     """(reference.fasta) -> tn5Wig[pos][count = 0]
-    :param fastafile: Input reference fasta file.
-    :return: list[][] of [pos][count], with count = 0.
+    :param fastafile: String; Input reference fasta file.
+    :return: List[][]; [position][count], with count = 0.
 
     Reads in a single fasta sequence from a file.
-    Returns a wig file with every position at count set to 0.
-    Fasta header line is used to the wig config line.
+    Returns a wig file of every position with [count] = 0.
+    Fasta header line is used in wig config line.
     """
 
-    print('\nComputing Reference Tn5 .wig file for: ' + fastafile)
+    print('Computing Reference Tn5 .wig file for: ' + fastafile + '\n')
     inputFile = open(fastafile, 'r')
     fastaData = inputFile.read()
 
     # Check fastafile for a single header line.
     if fastaData.count('>') > 1:
-        print('Error: More than one fasta header line in ' + fastafile)
+        print('Error: More than one fasta header line in ' + fastafile + '\n')
         raise SystemExit(1)
 
     # Process the fasta file into a header and a sequence variables
@@ -51,13 +51,13 @@ def tn5RefWig(fastafile):
 
 def tn5BedfileToTntags(bedfile):
     """ ('path/to/bedfile.bed') -> tntagsList[]
+    :param bedfile: String; path to an input bedfile.
+    :return: List[pos]; Tn5 insertion positions of all reads.
 
-    Opens, reads, and parses a bedfile from tn5 tnseq given path to the file.
-    Returns a list, each element the genomic coordinate of tn-tag start offset by 9 bp.
-    This script takes into account the strand the read was mapped to.
-
+    Parses a bedfile from Tn5 Tnseq and returns a list of
+    genomic coordinates offset by 9 bp for  Tn5 insertion positions.
+    Takes into account the strand the read was mapped to.
     """
-
     # Open input bedfile
     bedfileIn = open(bedfile, 'r')
 

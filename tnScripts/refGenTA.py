@@ -1,23 +1,24 @@
-# 2019 Benjamin J Perry - Attribution-NonCommercial-ShareAlike 4.0 International
+# 2020 Benjamin J Perry - Attribution-NonCommercial-ShareAlike 4.0 International
 # (CC BY-NC-SA 4.0)
-# Version: 2.1.0
+# Version: 2.2.0
 # Maintainer: Benjamin J Perry
 # Email: benjamin.perry@postgrad.otago.ac.nz
-# Status: Functional
+# Status: Dev
 # Citation: TBD
 
 def wigRefGen(fastafile, outfile='', printStatus=False):
-    '''(reference.fasta, output.wig, printStatus=Boolean) -> refWig[][] OR Null; print to output.wig if True
+    """(reference.fasta, output.wig, printStatus=Boolean) -> refWig[][] OR Null; print to output.wig if True
+    :param fastafile: String; input fasta file.
+    :param outfile: String; outfile to write reference 'TA' wig track to.
+    :param printStatus: Boolean; if True prints Ref wig file object with function call.
+    :return: List[pos][count]; of TA sites with wig header line.
+
     Reads in a single fasta sequence from a file. Identifies the position of the T in ever TA motif.
     Returns a wig files with every TA site and the count column set to 100.
     Fasta header line is used to the wig config line.
 
-    :param fastafile: String; input fasta file.
-    :param outfile: String; outfile to write reference 'TA' wig track to.
-    :param printStatus: Boolean; if True prints Ref wig file object with function call.
-    :return: return list of [pos, count] of TA sites with wig header line.
-    '''
-    #TODO Implement Checks for multi-fasta inputs
+    """
+    # TODO Implement Checks for multi-fasta inputs
 
     print('\nComputing Reference TA .wig file for: ' + fastafile)
     inputFile = open(fastafile, 'r')
@@ -103,7 +104,7 @@ if __name__ == '__main__':
 
     print("Reference .wig file printed to: " + args.outputWigFile + "\n")
 
-    print('2018 Benjamin J Perry - (CC BY-NC-SA 4.0)')
-    print('Version: 2.1.0')
+    print('2020 Benjamin J Perry - (CC BY-NC-SA 4.0)')
+    print('Version: 2.3.0')
     print('Email: benjamin.perry@postgrad.otago.ac.nz')
     print('Citation: TBD\n')
