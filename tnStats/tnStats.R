@@ -9,13 +9,13 @@
 # R code for handling tnseq wig files and running MANOVA comparison between multiple treatments
 
 
-readWig <- function(wigPath){
+readWig <- function(wigPath) {
 #Reads in a .wig file
 
 return wigList
 }
 
-mergeWig <- function(wigList){
+mergeWig <- function(wigList) {
 #Take multipl wig objects and merge into a table
 
 #Option to filter '0
@@ -23,33 +23,33 @@ mergeWig <- function(wigList){
 return wigTable
 }
 
-readGFF <- function(){
+readGFF <- function() {
 #reads in a gff file
 
 return gffDataframe
 }
 
-NormWigTable <- function(wigTable){
+NormWigTable <- function(wigTable) {
 #return the clr transformed read counts across insertions sites
 
 
 return NormWigTable
 }
 
-summarizeFeature <- function(NormWigTable, GFF$Feature){
+summarizeFeature <- function(NormWigTable, GFF$Feature) {
 #Take entry in .gff file and returns the normalized read counts and normalize insertion abundance
 
 return featureSummary
 }
 
-tnseqMANOVA <- function(){
+tnseqMANOVA <- function() {
 #computes MANOVA test for feature
 #returns unadjusted p-value
 
 return MANOVAStats
 }
 
-tnseqFDR <- function(){
+tnseqFDR <- function() {
 #takes a table of MANOVA p-values and does FDR correction
 
 return adjPValue
