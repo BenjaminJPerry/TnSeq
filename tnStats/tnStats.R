@@ -52,5 +52,6 @@ return MANOVAStats
 tnseqFDR <- function() {
 #takes a table of MANOVA p-values and does FDR correction
 
+#option for independance filtering
 return adjPValue
 }
