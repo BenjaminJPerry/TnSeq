@@ -14,7 +14,7 @@ for (seqLib in list.dirs(recursive = F)) {
                             "ReadID",
                             "MPQ",
                             "Strand")
-        
+
         print(paste("Total Reads: ", length(BedFile$Chrom)))
         cat("\n")
         PlusStrand <- BedFile %>% filter(Strand == "+")
@@ -22,8 +22,8 @@ for (seqLib in list.dirs(recursive = F)) {
 
         wigOutPath <- paste(seqLib, "/wig", sep = '')
         dir.create(path = wigOutPath, showWarnings = T)
-        
-        
+
+
         #Plus Strand Wig Stats and Wig File
         PlusWig <- as.data.frame(table(PlusStrand$ChromStart+10))
         PWigOut <- paste(wigOutPath, "/", seqRoot, ".plus.wig", sep = "")
@@ -35,15 +35,15 @@ for (seqLib in list.dirs(recursive = F)) {
         cat("Summary Statistics:\n")
         print(describe(PlusWig$Freq, trim = 0.05, IQR = T))
         PlusWig$Var1 <- as.integer(levels(PlusWig$Var1))
-        cat("variableStep chrom=R7A",file=PWigOut,sep="\n")
+        cat("variableStep chrom=CP051772",file=PWigOut,sep="\n")
         write_delim(x = PlusWig,
                     path = PWigOut,
                     delim = " ",
                     col_names = F,
                     append = T)
         cat("\n\n")
-        
-        
+
+
         #Minus Strand Wig Stats and Wig File
         MinusWig <-as.data.frame(table(MinusStrand$ChromEnd-10))
         MinusWigforDescribe <- MinusWig
@@ -57,15 +57,15 @@ for (seqLib in list.dirs(recursive = F)) {
         cat("Summary Statistics:\n")
         print(describe(MinusWigforDescribe$Freq, trim = 0.05, IQR = T))
         MinusWig$Var1 <- as.integer(levels(MinusWig$Var1))
-        cat("variableStep chrom=R7A",file=MWigOut,sep="\n")
+        cat("variableStep chrom=CP051772",file=MWigOut,sep="\n")
         write_delim(x = MinusWig,
                     path = MWigOut,
                     delim = " ",
                     col_names = F,
                     append = T)
         cat("\n\n")
-        
-        
+
+
         ObsAll <- ifelse(BedFile$Strand == "+", BedFile$ChromStart+10, BedFile$ChromEnd-10) # Combined offsets
         AllWig <- as.data.frame(table(ObsAll))
         AllWigOut <- paste(wigOutPath, "/", seqRoot, ".all.wig", sep = "")
@@ -77,15 +77,15 @@ for (seqLib in list.dirs(recursive = F)) {
         cat("Summary Statistics:\n")
         print(describe(AllWig$Freq, trim = 0.05, IQR = T))
         AllWig$ObsAll <- as.integer(levels(AllWig$ObsAll))
-        cat("variableStep chrom=R7A",file=AllWigOut,sep="\n")
+        cat("variableStep chrom=CP051772",file=AllWigOut,sep="\n")
         write_delim(x = AllWig,
                     path = AllWigOut,
                     delim = " ",
                     col_names = F,
                     append = T)
         cat("\n\n")
-        
-        
+
+
         FiltAll <- AllWig %>% filter(Freq>1) #remove singletons
         FiltWigOut <- paste(wigOutPath, "/", seqRoot, ".filt.1.wig", sep = "")
         print(paste("Printing .wig file:", FiltWigOut))
@@ -95,15 +95,15 @@ for (seqLib in list.dirs(recursive = F)) {
         )))
         cat("Summary Statistics:\n")
         print(describe(FiltAll$Freq, trim = 0.05, IQR = T))
-        cat("variableStep chrom=R7A",file=FiltWigOut,sep="\n")
+        cat("variableStep chrom=CP051772",file=FiltWigOut,sep="\n")
         write_delim(x = FiltAll,
                     path = FiltWigOut,
                     delim = " ",
                     col_names = F,
                     append = T)
         cat("\n\n")
-        
-        
+
+
         FiltAll2 <- AllWig %>% filter(Freq>2) #remove singletons and doubletons
         FiltWigOut2 <- paste(wigOutPath, "/", seqRoot, ".filt.2.wig", sep = "")
         print(paste("Printing .wig file:", FiltWigOut2))
@@ -113,14 +113,14 @@ for (seqLib in list.dirs(recursive = F)) {
         )))
         cat("Summary Statistics:\n")
         print(describe(FiltAll2$Freq, trim = 0.05, IQR = T))
-        cat("variableStep chrom=R7A",file=FiltWigOut2,sep="\n")
+        cat("variableStep chrom=CP051772",file=FiltWigOut2,sep="\n")
         write_delim(x = FiltAll2,
                     path = FiltWigOut2,
                     delim = " ",
                     col_names = F,
                     append = T)
         cat("\n\n")
-        
+
         #Clean large variable from memory
         rm(BedFile)
         rm(PlusStrand)
@@ -131,5 +131,5 @@ for (seqLib in list.dirs(recursive = F)) {
         rm(AllWig)
         rm(FiltAll)
         rm(FiltAll2)
-        
+
 }
