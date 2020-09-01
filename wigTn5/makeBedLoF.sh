@@ -44,7 +44,7 @@ printf "\n\n\n"
 printf "Trimming Reads...\n\n\n"
 # Trim Tn5 ME and polyC; truncate reads at 50 bp
 TRIMREADS=reads/"$i".trim.fastq.gz
-cutadapt  -j 12 -g GAGATGTG -e .15 -l 62 -m 37 --trimmed-only -o "$TRIMREADS" "$READS" 1> reads/"$i".cutadapt.log
+cutadapt  -j 12 -g TATAAGAGACAG -l 50 -m 25 -e 0.2 --discard-untrimmed -o "$TRIMREADS" "$READS" 1> reads/"$i".cutadapt.log
 
 ### Filter pJG714 reads from data
 mkdir filter

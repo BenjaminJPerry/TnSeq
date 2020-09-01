@@ -30,7 +30,7 @@ for (seqLib in list.dirs(recursive = F)) {
         for (entry in unique(BedFile$Chrom)) {
                 replicon <- as.character(entry)
                 repliconBed <- BedFile %>% filter(Chrom == replicon)
-                headerLine <- paste("variableStep chrom=", replicon)
+                headerLine <- paste("variableStep chrom=", replicon, sep = '')
                 
                 print(paste("Total Reads in", replicon, ":", length(repliconBed$Chrom)))
                 cat("\n")
@@ -47,7 +47,9 @@ for (seqLib in list.dirs(recursive = F)) {
                 
                 cat(headerLine,
                     file = PWigOut,
-                    sep = "\n")
+                    sep = "\n",
+                    append = T
+                    )
                 
                 write_delim(
                         x = PlusWig,
@@ -77,9 +79,11 @@ for (seqLib in list.dirs(recursive = F)) {
                 MinusWig$Var1 <- as.integer(levels(MinusWig$Var1))
                 
                 
-                cat(headLine,
+                cat(headerLine,
                     file = MWigOut,
-                    sep = "\n")
+                    sep = "\n",
+                    append = T
+                )
                 
                 
                 write_delim(
@@ -106,7 +110,9 @@ for (seqLib in list.dirs(recursive = F)) {
                 
                 cat(headerLine,
                     file = AllWigOut,
-                    sep = "\n")
+                    sep = "\n",
+                    append = T
+                    )
                 
                 write_delim(
                         x = AllWig,
@@ -126,7 +132,9 @@ for (seqLib in list.dirs(recursive = F)) {
                 
                 cat(headerLine,
                     file = FiltWigOut,
-                    sep = "\n")
+                    sep = "\n",
+                    append = T
+                    )
                 
                 write_delim(
                         x = FiltAll,
@@ -138,14 +146,14 @@ for (seqLib in list.dirs(recursive = F)) {
                 cat("\n\n")
                 
                 #Clean large variable from memory
-                rm(BedFile)
-                rm(PlusStrand)
-                rm(MinusStrand)
-                rm(PlusWig)
-                rm(MinusWig)
-                rm(ObsAll)
-                rm(AllWig)
-                rm(FiltAll)
-                rm(FiltAll2)
+                # rm(BedFile)
+                # rm(PlusStrand)
+                # rm(MinusStrand)
+                # rm(PlusWig)
+                # rm(MinusWig)
+                # rm(ObsAll)
+                # rm(AllWig)
+                # rm(FiltAll)
+                # rm(FiltAll2)
         }
 }

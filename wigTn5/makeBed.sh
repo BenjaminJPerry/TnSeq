@@ -34,6 +34,8 @@ mkdir "$i"
 mv "$i"*.gz "$i"
 
 cd $i
+
+printf "Processing $i... \n"
 # Working in Sample root dir
 mkdir reads
 mv "$i"*.gz reads
@@ -43,7 +45,7 @@ printf "\n\n\n"
 printf "Trimming Reads...\n\n\n"
 # Trim Tn5 ME and polyC; truncate reads at 50 bp
 TRIMREADS=reads/"$i".trim.fastq.gz
-cutadapt  -j 12 -g GAGATGTG -e .15 -l 62 -m 37 --trimmed-only -o "$TRIMREADS" "$READS" 1> reads/"$i".cutadapt.log
+cutadapt  -j 12 -g TATAAGAGACAG -l 50 -m 25 -e 0.2 --discard-untrimmed -o "$TRIMREADS" "$READS" 1> reads/"$i".cutadapt.log
 
 ### Filter pJG714 reads from data
 mkdir filter
@@ -87,12 +89,12 @@ printf "Aligning Remaining Reads to E. coli K12...\n\n\n"
 bowtie2 -p 12 --fast -x "$ECOLIREF" -U "$UNALINREADS" --un-gz "$MYSTYREADS" | samtools sort -o "$CONBAM"
 samtools index "$CONBAM" "$CONBAMBAI"
 
-python /home/ronson/projects/TnSeq/tnScripts/wigScripts.py -F /home/ronson/ref/R7A_20-4-202000000000.current.fasta -B "$BEDFILE" -O "$i".ES.tn5.wig -Tn5
+#python /home/ronson/projects/TnSeq/tnScripts/wigScripts.py -F /home/ronson/ref/R7A_20-4-202000000000.current.fasta -B "$BEDFILE" -O "$i".ES.tn5.wig -Tn5
 
 cd ..
 
 done
 
-Rscript --verbose /home/ronson/projects/TnSeq/wigTn5/makeWigIGV.R
+#Rscript --verbose /home/ronson/projects/TnSeq/wigTn5/makeWigIGV.R
 
 exit
