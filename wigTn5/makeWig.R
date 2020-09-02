@@ -73,8 +73,7 @@ cap_wig <- function(wig, SD_threshold=3.5, gMean=NULL, gSDev=NULL){
   
   return(wig)
 }
-
-#TODO: make TraDIS insertion plot
+# make TraDIS insertion plot
 tradis_plot <- function(repliconBed, repliconLength=6530403, min_count=3, capping=T){
   # replicon length is currently hardcoded for R7A
   require(tidyverse)
@@ -89,13 +88,25 @@ tradis_plot <- function(repliconBed, repliconLength=6530403, min_count=3, cappin
   pBed <- repliconBed %>% filter(Strand == "+")
   pWig <- as.data.frame(table(pBed$ChromStart + 10))
   rm(pBed)
-  pWig <- pWig %>% filter(Freq >= min_count) %>% mutate("pos" = as.integer(as.character(Var1)), "count" = Freq, Var1 = NULL, Freq = NULL)
+  pWig <-
+    pWig %>% filter(Freq >= min_count) %>% mutate(
+      "pos" = as.integer(as.character(Var1)),
+      "count" = Freq,
+      Var1 = NULL,
+      Freq = NULL
+    )
   
   # make minus strand
   mBed <- repliconBed %>% filter(Strand == "-")
   mWig <- as.data.frame(table(mBed$ChromEnd - 10))
   rm(mBed)
-  mWig <- mWig %>% filter(Freq >= min_count) %>% mutate("pos" = as.integer(as.character(Var1)), "count" = Freq, Var1 = NULL, Freq = NULL)
+  mWig <-
+    mWig %>% filter(Freq >= min_count) %>% mutate(
+      "pos" = as.integer(as.character(Var1)),
+      "count" = Freq,
+      Var1 = NULL,
+      Freq = NULL
+    )
   
   # make all wig
   allWig <- bind_rows(mWig, pWig)
@@ -107,10 +118,24 @@ tradis_plot <- function(repliconBed, repliconLength=6530403, min_count=3, cappin
   mcWig <- cap_wig(wig = mWig, gMean = gMean, gSDev = gSDev)
   
   ### Merge and return the TraDIS insetion tack
+  tradisPlot <- data.frame(
+    pos = as.integer(seq(from = 1, to = repliconLength, by = 1))
+  )
+  tradisPlot <- left_join(x = tradisPlot, y = pcWig, "pos")
+  tradisPlot <- left_join(x = tradisPlot, y = mcWig, "pos")
+  # Clean up column names and NA values = 0
+  tradisPlot <-
+    tradisPlot %>% mutate(
+      "plus" = as.integer(replace_na(count.x, replace = 0)),
+      "minus" = as.integer(replace_na(count.y, replace = 0)),
+      count.x = NULL,
+      count.y = NULL
+    )
+  
+  return(tradisPlot)
 }
 
-
-
+#TODO: Make loop for each directory and nested loop for each replicon in bedFiles
 for (seqLib in list.dirs(recursive = F)) {
         #Prepareing the directory tree and files paths for the loop.
         cat("\n\n\n")
@@ -144,7 +169,6 @@ for (seqLib in list.dirs(recursive = F)) {
         for (entry in unique(bedFile$Chrom)) {
                 replicon <- as.character(entry)
                 headerLine <- paste("variableStep chrom=", replicon, sep = '')
-                
                 repliconBed <- bedFile %>% filter(Chrom == replicon)
                 
 
