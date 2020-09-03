@@ -15,23 +15,23 @@ make_wig <- function(repliconBed, strand="all", min_count=3, capping=T){
   require(psych)
   if (length(unique(repliconBed$Chrom)) > 1) stop("'repliconBed' contains multiple replicons.")
   replicon <- as.character(unique(repliconBed$Chrom))
-  
+
   print(paste("Total Reads in", replicon, ":", length(repliconBed$Chrom)))
   cat("\n")
-  
+
   #filter the replicon bedList for the indicated strand.
   if (!(strand %in% c("-", "+", "all"))) stop("'strand' contains invalid character.")
-  
+
   print(paste("Filtering ", replicon, " for reads mapped to ", strand, "...", sep = ""))
-  
+
   if (strand == "all") {
     strandBed <- repliconBed
   } else {
     strandBed <- repliconBed %>% filter(Strand == strand)
   }
-  
+
   print(paste(length(strandBed$ChromStart), " reads mapped to ", strand, "...", sep = ""))
-  
+
   if (strand == "+") {
     wig <- as.data.frame(table(strandBed$ChromStart + 9))
     wig <- wig %>% select("pos" = Var1, "count" = Freq)
@@ -49,24 +49,24 @@ make_wig <- function(repliconBed, strand="all", min_count=3, capping=T){
   }
   print(paste(length(wig$pos), " unique insertions before filtering...", sep = ""))
   wig$pos <- as.integer(levels(wig$pos))
-  
+
   #filter wig by min_count, default is 3
   wig <- wig %>% filter(count >= min_count)
   print(paste(length(wig$pos), " unique insertions after filtering at minimum count threshold of ", min_count, "...", sep = ""))
-  
+
   #Cap the counts at the 99.995% percentile
   if(capping){
     wig <- cap_wig(wig)
   }
-  
+
   print(paste("Unique Insertions with min_count=" , min_count, " and capping=", capping, ": ", length(wig$count), sep = ""))
   cat(paste("Summary Statistics for ", replicon, " on ", strand, " strand:\n"), sep = "")
   print(describe(wig[-1]), digits = 2)
-  
+
   if (strand == "-") {
   wig$count <- as.numeric(wig$count * (-1))
   }
-  
+
   return(wig)
 
 }
@@ -74,22 +74,22 @@ make_wig <- function(repliconBed, strand="all", min_count=3, capping=T){
 cap_wig <- function(wig, SD_threshold=3.5, gMean=NULL, gSDev=NULL){
   require(tidyverse)
   wig$logNorm <- log(wig$count)
-  
+
   if (is.null(gSDev)) {
     gSDev <- sd(wig$logNorm)
   }
-  
+
   if (is.null(gMean)) {
     gMean <- mean(wig$logNorm)
   }
   print(paste("Capping counts at ", SD_threshold, " SDs above the mean..."))
   cap <- gMean + gSDev*SD_threshold
-  
+
   # capping
   wig$logNormCap <- wig$logNorm
   wig <- mutate(wig, logNormCap = ifelse(logNormCap > cap, exp(cap), exp(logNormCap)))
   wig <- wig %>% transmute(pos, "count" = as.numeric(logNormCap))
-  
+
   return(wig)
 }
 
@@ -100,10 +100,10 @@ tradis_plot <- function(repliconBed, repliconLength=6530403, min_count=3, cappin
   require(psych)
   if (length(unique(repliconBed$Chrom)) > 1) stop("'repliconBed' contains multiple replicons.")
   replicon <- as.character(unique(repliconBed$Chrom))
-  
+
   print(paste("Total Reads in", replicon, ":", length(repliconBed$Chrom)))
   cat("\n")
-  
+
   # make plus strand
   pBed <- repliconBed %>% filter(Strand == "+")
   pWig <- as.data.frame(table(pBed$ChromStart + 10))
@@ -115,7 +115,7 @@ tradis_plot <- function(repliconBed, repliconLength=6530403, min_count=3, cappin
       Var1 = NULL,
       Freq = NULL
     )
-  
+
   # make minus strand
   mBed <- repliconBed %>% filter(Strand == "-")
   mWig <- as.data.frame(table(mBed$ChromEnd - 10))
@@ -127,16 +127,16 @@ tradis_plot <- function(repliconBed, repliconLength=6530403, min_count=3, cappin
       Var1 = NULL,
       Freq = NULL
     )
-  
+
   # make all wig
   allWig <- bind_rows(mWig, pWig)
   describe(allWig$count)
   gSDev <- sd(log(allWig$count))
   gMean <- mean(log(allWig$count))
-  
+
   pcWig <- cap_wig(wig = pWig, gMean = gMean, gSDev = gSDev)
   mcWig <- cap_wig(wig = mWig, gMean = gMean, gSDev = gSDev)
-  
+
   ### Merge and return the TraDIS insetion tack
   tradisPlot <- data.frame(
     pos = as.integer(seq(from = 1, to = repliconLength, by = 1))
@@ -151,7 +151,7 @@ tradis_plot <- function(repliconBed, repliconLength=6530403, min_count=3, cappin
       count.x = NULL,
       count.y = NULL
     )
-  
+
   return(tradisPlot)
 }
 
@@ -173,25 +173,25 @@ for (seqLib in list.dirs(recursive = F)) {
 
         wigOutPath <- paste(seqLib, "/wig", sep = '')
         dir.create(path = wigOutPath, showWarnings = T)
-        
+
         pWigOut <- paste(wigOutPath, "/", seqRoot, ".plus.wig", sep = "")
         mWigOut <- paste(wigOutPath, "/", seqRoot, ".minus.wig", sep = "")
         filtWigOut <- paste(wigOutPath, "/", seqRoot, ".filt.3.wig", sep = "")
         file.create(pWigOut)
         file.create(mWigOut)
         file.create(filtWigOut)
-        
+
         tPlotOutPath <- paste(seqLib, "/tradis", sep = '')
         dir.create(path = tPlotOutPath, showWarnings = T)
         tPlotOut <- paste(tPlotOutPath, "/", seqRoot, ".tradis_insertion_plot.gz", sep = "")
         file.create(tPlotOut)
-        
-        #Nested loop for unique replicon in the bedFile.  
+
+        #Nested loop for unique replicon in the bedFile.
         for (entry in unique(bedFile$Chrom)) {
                 replicon <- as.character(entry)
                 headerLine <- paste("variableStep chrom=", replicon, sep = '')
                 repliconBed <- bedFile %>% filter(Chrom == replicon)
-                
+
                 # plus strand wig file
                 plusWig <- make_wig(repliconBed = repliconBed, strand = "+", min_count = 3, capping = T)
                 cat("\n")
@@ -220,7 +220,7 @@ for (seqLib in list.dirs(recursive = F)) {
                     sep = "\n",
                     append = T
                 )
-                
+
                 write_delim(
                   x = minusWig,
                   path = mWigOut,
@@ -229,7 +229,7 @@ for (seqLib in list.dirs(recursive = F)) {
                   append = T
                 )
                 cat("\n")
-                
+
                 # all wig file
                 allWig <- make_wig(repliconBed = repliconBed, strand = "all", min_count = 3, capping = T)
                 print(paste("Printing .wig file:", filtWigOut))
@@ -248,10 +248,10 @@ for (seqLib in list.dirs(recursive = F)) {
                         append = T
                 )
                 cat("\n")
-                
+
                 # tradis insertion plot
                 tradisPlot <- tradis_plot(repliconBed = repliconBed, min_count = 3, capping = T)
                 write_delim(tradisPlot[-1], tPlotOut, delim = " ", col_names = F)
-                
+
         }
 }

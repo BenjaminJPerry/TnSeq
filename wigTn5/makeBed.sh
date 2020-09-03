@@ -21,7 +21,6 @@ printf "\n\n\n"
 
 ###Global variables needed for analysis
 R7AWT=~/ref/R7A
-R7ANS=~/Projects/TnSeq/ref/R7ANS
 ECOLIREF=~/ref/ECOLI
 PJG714REF=~/ref/PJG714
 
