@@ -7,7 +7,7 @@
 
 library(tidyverse)
 library(psych)
-
+options(width=120)
 
 # wig generating function
 make_wig <- function(repliconBed, strand="all", min_count=3, capping=T){
@@ -193,7 +193,7 @@ for (seqLib in list.dirs(recursive = F)) {
                 repliconBed <- bedFile %>% filter(Chrom == replicon)
 
                 # plus strand wig file
-                plusWig <- make_wig(repliconBed = repliconBed, strand = "+", min_count = 3, capping = T)
+                plusWig <- make_wig(repliconBed = repliconBed, strand = "+", min_count = 4, capping = T)
                 cat("\n")
                 print(paste("Printing .wig file:", pWigOut))
                 cat(headerLine,
@@ -212,7 +212,7 @@ for (seqLib in list.dirs(recursive = F)) {
                 cat("\n")
 
                 # minus strand wig file
-                minusWig <- make_wig(repliconBed = repliconBed, strand = "-", min_count = 3, capping = T)
+                minusWig <- make_wig(repliconBed = repliconBed, strand = "-", min_count = 4, capping = T)
                 cat("\n")
                 print(paste("Printing .wig file:", mWigOut))
                 cat(headerLine,
@@ -231,7 +231,7 @@ for (seqLib in list.dirs(recursive = F)) {
                 cat("\n")
 
                 # all wig file
-                allWig <- make_wig(repliconBed = repliconBed, strand = "all", min_count = 3, capping = T)
+                allWig <- make_wig(repliconBed = repliconBed, strand = "all", min_count = 4, capping = T)
                 print(paste("Printing .wig file:", filtWigOut))
 
                 cat(headerLine,
@@ -250,7 +250,7 @@ for (seqLib in list.dirs(recursive = F)) {
                 cat("\n")
 
                 # tradis insertion plot
-                tradisPlot <- tradis_plot(repliconBed = repliconBed, min_count = 3, capping = T)
+                tradisPlot <- tradis_plot(repliconBed = repliconBed, min_count = 4, capping = T)
                 write_delim(tradisPlot[-1], tPlotOut, delim = " ", col_names = F)
 
         }
