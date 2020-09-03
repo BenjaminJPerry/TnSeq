@@ -89,12 +89,8 @@ printf "Aligning Remaining Reads to E. coli K12...\n\n\n"
 bowtie2 -p 12 --fast -x "$ECOLIREF" -U "$UNALINREADS" --un-gz "$MYSTYREADS" | samtools sort -o "$CONBAM"
 samtools index "$CONBAM" "$CONBAMBAI"
 
-#python /home/ronson/projects/TnSeq/tnScripts/wigScripts.py -F /home/ronson/ref/R7A_20-4-202000000000.current.fasta -B "$BEDFILE" -O "$i".ES.tn5.wig -Tn5
-
 cd ..
 
 done
-
-#Rscript --verbose /home/ronson/projects/TnSeq/wigTn5/makeWigIGV.R
 
 exit

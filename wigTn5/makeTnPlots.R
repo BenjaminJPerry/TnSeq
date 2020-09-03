@@ -1,3 +1,10 @@
+# 2020 Benjamin J Perry - Attribution-NonCommercial-ShareAlike 4.0 International
+# (CC BY-NC-SA 4.0)
+# Version: 2.0.0
+# Maintainer: Benjamin J Perry
+# Email: benjamin.perry@postgrad.otago.ac.nz
+# Status: Functional
+
 library(tidyverse)
 library(psych)
 
@@ -150,7 +157,7 @@ tradis_plot <- function(repliconBed, repliconLength=6530403, min_count=3, cappin
 
 #Loop for each directory and nested loop for each replicon in bedFile
 for (seqLib in list.dirs(recursive = F)) {
-        #Prepareing the directory tree and files paths for the loop.
+        #Preparing the directory tree and files paths for the loop.
         cat("\n\n\n")
         seqRoot <- str_split(seqLib, "/", simplify = T)[2]
         print(paste("Processing Sample: ", seqRoot))
@@ -202,7 +209,7 @@ for (seqLib in list.dirs(recursive = F)) {
                         col_names = F,
                         append = T
                 )
-                cat("\n\n")
+                cat("\n")
 
                 # minus strand wig file
                 minusWig <- make_wig(repliconBed = repliconBed, strand = "-", min_count = 3, capping = T)
@@ -221,7 +228,7 @@ for (seqLib in list.dirs(recursive = F)) {
                   col_names = F,
                   append = T
                 )
-                cat("\n\n")
+                cat("\n")
                 
                 # all wig file
                 allWig <- make_wig(repliconBed = repliconBed, strand = "all", min_count = 3, capping = T)
@@ -240,7 +247,7 @@ for (seqLib in list.dirs(recursive = F)) {
                         col_names = F,
                         append = T
                 )
-                cat("\n\n")
+                cat("\n")
                 
                 # tradis insertion plot
                 tradisPlot <- tradis_plot(repliconBed = repliconBed, min_count = 3, capping = T)
