@@ -66,7 +66,8 @@ make_wig <- function(repliconBed, strand="all", min_count=3, capping=T){
   if (strand == "-") {
   wig$count <- as.numeric(wig$count * (-1))
   }
-
+  
+  wig <- wig %>% transmute(pos, count = round(count, digits = 0))
   return(wig)
 
 }
