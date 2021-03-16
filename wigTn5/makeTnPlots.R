@@ -66,7 +66,7 @@ make_wig <- function(repliconBed, strand="all", min_count=3, capping=T){
   if (strand == "-") {
   wig$count <- as.numeric(wig$count * (-1))
   }
-  
+
   wig <- wig %>% transmute(pos, count = round(count, digits = 0))
   return(wig)
 
@@ -194,7 +194,7 @@ for (seqLib in list.dirs(recursive = F)) {
                 repliconBed <- bedFile %>% filter(Chrom == replicon)
 
                 # plus strand wig file
-                plusWig <- make_wig(repliconBed = repliconBed, strand = "+", min_count = 4, capping = T)
+                plusWig <- make_wig(repliconBed = repliconBed, strand = "+", min_count = 3, capping = T)
                 cat("\n")
                 print(paste("Printing .wig file:", pWigOut))
                 cat(headerLine,
@@ -213,7 +213,7 @@ for (seqLib in list.dirs(recursive = F)) {
                 cat("\n")
 
                 # minus strand wig file
-                minusWig <- make_wig(repliconBed = repliconBed, strand = "-", min_count = 4, capping = T)
+                minusWig <- make_wig(repliconBed = repliconBed, strand = "-", min_count = 3, capping = T)
                 cat("\n")
                 print(paste("Printing .wig file:", mWigOut))
                 cat(headerLine,
@@ -232,7 +232,7 @@ for (seqLib in list.dirs(recursive = F)) {
                 cat("\n")
 
                 # all wig file
-                allWig <- make_wig(repliconBed = repliconBed, strand = "all", min_count = 4, capping = T)
+                allWig <- make_wig(repliconBed = repliconBed, strand = "all", min_count = 3, capping = T)
                 print(paste("Printing .wig file:", filtWigOut))
 
                 cat(headerLine,
@@ -251,7 +251,7 @@ for (seqLib in list.dirs(recursive = F)) {
                 cat("\n")
 
                 # tradis insertion plot
-                tradisPlot <- tradis_plot(repliconBed = repliconBed, min_count = 4, capping = T)
+                tradisPlot <- tradis_plot(repliconBed = repliconBed, min_count = 3, capping = T)
                 write_delim(tradisPlot[-1], tPlotOut, delim = " ", col_names = F)
 
         }

@@ -7,7 +7,7 @@
 
 #!/bin/sh
 
-#~/Projects/TnSeq/wigTn5/makeBed.sh
+~/projects/TnSeq/wigTn5/makeBed.sh
 
 Rscript --verbose ~/projects/TnSeq/wigTn5/makeTnPlots.R
 
