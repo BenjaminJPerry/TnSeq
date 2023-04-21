@@ -1,1 +1,8 @@
 # Pipeline Configuration File
+###Global variables needed for analysis
+BOWTIE_REFERENCE: "/ref/R7A"
+BOWTIE_ECOLIREF: "/ref/ECOLI"
+BOWTIE_PJG714REF: "/ref/PJG714"
+
+# Tn5 Adapter Sequence to be trimmed from 5' Read End
+IR_ELEMENT: "TATAAGAGACAG"

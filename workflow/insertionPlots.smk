@@ -5,13 +5,13 @@
 # Maintainer: Benjamin J Perry
 # Email: ben.perry@agresearch.co.nz
 
-# configfile: "config/config.yaml"
+configfile: "config/config.yaml"
 
 
 import os
 
 
-(FIDs,) = glob_wildcards("results/02_kneaddata/{sample}.fastq")
+(SAMPLES,) = glob_wildcards("fastq/{sample}.fastq.gz")
 
 
 onstart:
@@ -28,48 +28,98 @@ onstart:
 
 rule all:
     input:
-        "results/centrifuge.counts.tsv",
-        "results/centrifuge.counts.biom",
-
-        "results/kraken2.counts.tsv",
-        "results/kraken2.counts.biom",
-
-        "results/bracken.k2.counts.tsv",
-        "results/bracken.k2.counts.biom",
-
-        # expand("results/03_humann3Uniref50EC/{sample}_pathcoverage.tsv", sample=FIDs),
+        expand("04_aligned_beds/{sample}.bed", sample=SAMPLES),
 
 
-localrules:
-    generateCentrifugeSampleSheet,
-
-
-rule generateCentrifugeSampleSheet:
-    output:
-        sampleSheet = "resources/centrifugeSampleSheet.tsv",
-    threads: 2
-    shell:
-        "./workflow/scripts/generate_centrifuge_sample_sheet.sh -d results/02_kneaddata -p fastq -o {output.sampleSheet} "
-
-
-rule centrifugeGTDB:
+rule cutadapt:
     input:
-        sampleSheet = "resources/centrifugeSampleSheet.tsv",
+        fastq="fastq/{sample}.fastq.gz"
     output:
-        out = expand("results/03_centrifuge/{sample}.GTDB.centrifuge", sample = FIDs),
-        report = expand("results/03_centrifuge/{sample}.GTDB.centrifuge.report", sample = FIDs),
+        trimmed="01_trimmed_reads/{sample}.trimmed.fastq.gz"
     log:
-        "logs/centrifuge.GTDB.multi.log",
+        "logs/cutadapt.{sample}.log"
+    threads: 12
     conda:
-        "centrifuge"
-    threads: 32
-    resources:
-        mem_gb = lambda wildcards, attempt: 140 + ((attempt - 1) + 20),
-        time = "06:00:00",
+        "cutadapt"
+    params:
+        IR=config["IR_ELEMENT"]
     shell:
-        "centrifuge "
-        "-x /bifo/scratch/2022-BJP-GTDB/2022-BJP-GTDB/centrifuge/GTDB "
-        "--sample-sheet {input.sampleSheet} "
-        "-t "
-        "--threads {threads} "
-        "&> {log} "
+        "cutadapt "
+        "-j {threads} "
+        "-g {params.IR} "
+        "-l 50 "
+        "-m 25 "
+        "-e 0.2 "
+        "--discard-untrimmed "
+        "-o {output.trimmed} "
+        "{input.fastq} "
+        "2>&1 | tee {log}"
+
+
+rule pJG714_Filter:
+    input:
+        trimmed="01_trimmed_reads/{sample}.trimmed.fastq.gz"
+    output:
+        pJG714="02_pJG714_filtering/{sample}.pJG714.fastq.gz",
+        filtered="02_pJG714_filtering/{sample}.trimmed.filtered.fastq.gz"
+    log:
+        "logs/pJG714_filter.{sample}.log"
+    threads: 8
+    conda:
+        "bowtie2"
+    params:
+        PJG714=config["BOWTIE_PJG714REF"]
+    shell:
+        "bowtie2 "
+        "-p {threads} "
+        " --fast "
+        "-x {params.PJG714} "
+        "-U {input.trimmed} "
+        "--un-gz {output.filtered} "
+        "--al-gz {output.pJG714} "
+        "> /dev/null"
+
+
+rule align_tags:
+    input:
+        filtered="02_pJG714_filtering/{sample}.trimmed.filtered.fastq.gz",
+    output:
+        aligned_bam="03_aligned_bams/{sample}.trimmed.filtered.sorted.bam",
+        aligned_bai="03_aligned_bams/{sample}.trimmed.filtered.sorted.bam.bai",
+        unaligned="03_aligned_bams/{sample}.unaligned.fastq.gz",
+    log:
+        "logs/tntag_alignment.{sample}.log"
+    threads: 8
+    conda:
+        "bowtie2"
+    params:
+        REFERENCE=config["BOWTIE_REFERENCE"]
+    shell:
+        "bowtie2 "
+        "-p {threads} "
+        "--sensitive "
+        "-x {params.REFERENCE} "
+        "-U {input.filtered} "
+        "--no-unal "
+        "--un-gz {output.unaligned} | "
+        "samtools "
+        "sort "
+        "--write-index"
+        "-o {output.aligned_bam} "
+        "2>&1 | tee {log}"
+
+rule bam_to_bed:
+    input:
+        aligned_bam="03_aligned_bams/{sample}.trimmed.filtered.sorted.bam",
+    output:
+        aligned_bed="04_aligned_beds/{sample}.bed"
+    log:
+        "logs/bam_to_bed.{sample}.log"
+    threads: 8
+    conda:
+        "bedtools"
+    shell:
+        "bedtools "
+        "bamtobed "
+        "-i {input.aligned_bam} > {output.aligned_bed}"
+
