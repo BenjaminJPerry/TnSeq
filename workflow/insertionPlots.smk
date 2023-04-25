@@ -40,7 +40,7 @@ rule cutadapt:
         "logs/cutadapt.{sample}.log"
     threads: 12
     conda:
-        "cutadapt"
+        "workflow/envs/cutadapt.yaml"
     params:
         IR=config["IR_ELEMENT"]
     shell:
@@ -66,7 +66,7 @@ rule pJG714_Filter:
         "logs/pJG714_filter.{sample}.log"
     threads: 8
     conda:
-        "bowtie2"
+        "workflow/envs/bowtie2.yaml"
     params:
         PJG714=config["BOWTIE_PJG714REF"]
     shell:
@@ -91,7 +91,7 @@ rule align_tags:
         "logs/tntag_alignment.{sample}.log"
     threads: 8
     conda:
-        "bowtie2"
+        "workflow/envs/bowtie2.yaml"
     params:
         REFERENCE=config["BOWTIE_REFERENCE"]
     shell:
@@ -117,7 +117,7 @@ rule bam_to_bed:
         "logs/bam_to_bed.{sample}.log"
     threads: 8
     conda:
-        "bedtools"
+        "workflow/envs/bedtools.yaml"
     shell:
         "bedtools "
         "bamtobed "
