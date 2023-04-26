@@ -1,0 +1,42 @@
+name: /home/perrybe/conda-envs/cutadapt
+channels:
+  - defaults
+  - conda-forge
+  - bioconda
+  - file://bifo/support/admin/conda/agr-nonfree
+  - agresearch
+  - r
+dependencies:
+  - _libgcc_mutex=0.1=conda_forge
+  - _openmp_mutex=4.5=2_gnu
+  - bzip2=1.0.8=h7f98852_4
+  - ca-certificates=2022.9.24=ha878542_0
+  - cutadapt=4.1=py39hbf8eff0_1
+  - dnaio=0.9.1=py39hbf8eff0_1
+  - isa-l=2.30.0=ha770c72_4
+  - ld_impl_linux-64=2.39=hc81fddc_0
+  - libffi=3.4.2=h7f98852_5
+  - libgcc-ng=12.2.0=h65d4601_18
+  - libgomp=12.2.0=h65d4601_18
+  - libnsl=2.0.0=h7f98852_0
+  - libsqlite=3.39.4=h753d276_0
+  - libuuid=2.32.1=h7f98852_1000
+  - libzlib=1.2.13=h166bdaf_4
+  - ncurses=6.3=h27087fc_1
+  - openssl=3.0.5=h166bdaf_2
+  - pbzip2=1.1.13=0
+  - pigz=2.6=h27826a3_0
+  - pip=22.3=pyhd8ed1ab_0
+  - python=3.9.13=h2660328_0_cpython
+  - python-isal=1.1.0=py39hb9d737c_0
+  - python_abi=3.9=2_cp39
+  - readline=8.1.2=h0f457ee_0
+  - setuptools=65.5.0=pyhd8ed1ab_0
+  - sqlite=3.39.4=h4ff8645_0
+  - tk=8.6.12=h27826a3_0
+  - tzdata=2022e=h191b570_0
+  - wheel=0.37.1=pyhd8ed1ab_0
+  - xopen=1.6.0=py39hf3d152e_0
+  - xz=5.2.6=h166bdaf_0
+  - zlib=1.2.13=h166bdaf_4
+prefix: /home/perrybe/conda-envs/cutadapt

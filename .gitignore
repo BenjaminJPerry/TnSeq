@@ -1,8 +1,12 @@
-dataAnalysisDev/
-tnSeqExperiments/
 .idea/
-essentiality/marinerWig/R7A_hybrid_final.fasta
+.snakemake/
 ref/
+<<<<<<< HEAD
+IRBG74/
+fastq/
+output/
+logs/
+=======
 essentiality/marinerTRANSIT
 essentiality/tn5TraDIS
 essentiality/tn5TSAS
@@ -12,3 +16,4 @@ essentiality/tn5TSAS
 /tnSeqData
 /tnSeqAnalysis
 /IRBG74
+>>>>>>> master
