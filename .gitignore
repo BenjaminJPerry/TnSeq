@@ -1,6 +1,7 @@
 dataAnalysisDev/
 tnSeqExperiments/
 .idea/
+.snakemake
 essentiality/marinerWig/R7A_hybrid_final.fasta
 ref/
 essentiality/marinerTRANSIT
