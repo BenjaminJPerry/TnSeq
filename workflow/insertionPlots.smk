@@ -104,7 +104,7 @@ rule align_tags:
         "--un-gz {output.unaligned} | "
         "samtools "
         "sort "
-        "--write-index"
+        "--write-index "
         "-o {output.aligned_bam} "
         "2>&1 | tee {log}"
 
