@@ -1,7 +1,19 @@
 .idea/
 .snakemake/
 ref/
+<<<<<<< HEAD
 IRBG74/
 fastq/
 output/
 logs/
+=======
+essentiality/marinerTRANSIT
+essentiality/tn5TraDIS
+essentiality/tn5TSAS
+/essentiality/wigTn5/5237-01.bed
+/TA1TnseqIGV
+/TA1TraDIS
+/tnSeqData
+/tnSeqAnalysis
+/IRBG74
+>>>>>>> master
