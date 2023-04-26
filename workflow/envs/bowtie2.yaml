@@ -11,29 +11,39 @@ dependencies:
   - _openmp_mutex=4.5=2_gnu
   - bowtie2=2.4.5=py310h8d7afc0_4
   - bzip2=1.0.8=h7f98852_4
-  - ca-certificates=2022.9.24=ha878542_0
+  - c-ares=1.19.0=h5eee18b_0
+  - ca-certificates=2023.01.10=h06a4308_0
+  - curl=7.88.1=h5eee18b_0
+  - krb5=1.19.4=h568e23c_0
   - ld_impl_linux-64=2.39=hc81fddc_0
+  - libcurl=7.88.1=h91b91d3_0
+  - libedit=3.1.20221030=h5eee18b_0
+  - libev=4.33=h7f8727e_1
   - libffi=3.4.2=h7f98852_5
   - libgcc-ng=12.2.0=h65d4601_19
   - libgomp=12.2.0=h65d4601_19
+  - libnghttp2=1.46.0=hce63b2e_0
   - libnsl=2.0.0=h7f98852_0
   - libsqlite=3.39.4=h753d276_0
+  - libssh2=1.10.0=h8f2d780_0
   - libstdcxx-ng=12.2.0=h46fd767_19
-  - libuuid=2.32.1=h7f98852_1000
+  - libuuid=1.41.5=h5eee18b_0
   - libzlib=1.2.13=h166bdaf_4
   - ncurses=6.3=h27087fc_1
-  - openssl=3.0.5=h166bdaf_2
+  - openssl=1.1.1t=h7f8727e_0
   - perl=5.32.1=2_h7f98852_perl5
   - pip=22.3=pyhd8ed1ab_0
-  - python=3.10.6=ha86cf86_0_cpython
+  - python=3.10.9=h7a1cb2a_0
   - python_abi=3.10=2_cp310
   - readline=8.1.2=h0f457ee_0
+  - samtools=1.6=hcd7b337_9
   - setuptools=65.5.0=pyhd8ed1ab_0
+  - sqlite=3.40.1=h5082296_0
   - tbb=2021.6.0=h924138e_0
   - tk=8.6.12=h27826a3_0
   - tzdata=2022e=h191b570_0
   - wheel=0.37.1=pyhd8ed1ab_0
-  - xz=5.2.6=h166bdaf_0
+  - xz=5.2.10=h5eee18b_1
   - zlib=1.2.13=h166bdaf_4
   - zstd=1.5.2=h6239696_4
 prefix: /home/perrybe/conda-envs/bowtie2
