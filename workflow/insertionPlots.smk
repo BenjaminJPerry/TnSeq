@@ -28,14 +28,14 @@ onstart:
 
 rule all:
     input:
-        expand("04_aligned_beds/{sample}.bed", sample=SAMPLES),
+        expand("output/04_aligned_beds/{sample}.bed", sample=SAMPLES),
 
 
 rule cutadapt:
     input:
         fastq="fastq/{sample}.fastq.gz"
     output:
-        trimmed="01_trimmed_reads/{sample}.trimmed.fastq.gz"
+        trimmed="output/01_trimmed_reads/{sample}.trimmed.fastq.gz"
     log:
         "logs/cutadapt.{sample}.log"
     threads: 12
@@ -58,10 +58,10 @@ rule cutadapt:
 
 rule pJG714_Filter:
     input:
-        trimmed="01_trimmed_reads/{sample}.trimmed.fastq.gz"
+        trimmed="output/01_trimmed_reads/{sample}.trimmed.fastq.gz"
     output:
-        pJG714="02_pJG714_filtering/{sample}.pJG714.fastq.gz",
-        filtered="02_pJG714_filtering/{sample}.trimmed.filtered.fastq.gz"
+        pJG714="output/02_pJG714_filtering/{sample}.pJG714.fastq.gz",
+        filtered="output/02_pJG714_filtering/{sample}.trimmed.filtered.fastq.gz"
     log:
         "logs/pJG714_filter.{sample}.log"
     threads: 8
@@ -82,11 +82,11 @@ rule pJG714_Filter:
 
 rule align_tags:
     input:
-        filtered="02_pJG714_filtering/{sample}.trimmed.filtered.fastq.gz",
+        filtered="output/02_pJG714_filtering/{sample}.trimmed.filtered.fastq.gz",
     output:
-        aligned_bam="03_aligned_bams/{sample}.trimmed.filtered.sorted.bam",
-        aligned_bai="03_aligned_bams/{sample}.trimmed.filtered.sorted.bam.bai",
-        unaligned="03_aligned_bams/{sample}.unaligned.fastq.gz",
+        aligned_bam="output/03_aligned_bams/{sample}.trimmed.filtered.sorted.bam",
+        aligned_bai="output/03_aligned_bams/{sample}.trimmed.filtered.sorted.bam.bai",
+        unaligned="output/03_aligned_bams/{sample}.unaligned.fastq.gz",
     log:
         "logs/tntag_alignment.{sample}.log"
     threads: 8
@@ -110,9 +110,9 @@ rule align_tags:
 
 rule bam_to_bed:
     input:
-        aligned_bam="03_aligned_bams/{sample}.trimmed.filtered.sorted.bam",
+        aligned_bam="output/03_aligned_bams/{sample}.trimmed.filtered.sorted.bam",
     output:
-        aligned_bed="04_aligned_beds/{sample}.bed"
+        aligned_bed="output/04_aligned_beds/{sample}.bed"
     log:
         "logs/bam_to_bed.{sample}.log"
     threads: 8
