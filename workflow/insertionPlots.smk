@@ -123,3 +123,17 @@ rule bam_to_bed:
         "bamtobed "
         "-i {input.aligned_bam} > {output.aligned_bed}"
 
+
+
+rule bed_to_insertionplot:
+    input:
+        aligned_bed="output/04_aligned_beds/{sample}.bed"
+    output:
+        tradis_insertionplot_semaphore="output/05_tradis_insertionplots/.{sample}" #TODO
+    log:
+        "logs/bed_to_insertionplot.{sample}.log"
+    threads: 2
+    conda:
+        "envs/R.yaml"
+    shell:
+        "scripts/makeInsertionplots.R {input}"
