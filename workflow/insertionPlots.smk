@@ -70,12 +70,13 @@ rule cutadapt:
     shell:
         "cutadapt "
         "-j {threads} "
-        "-g {params.IR} "
+        "-g {params.IR} " #5' clip
+        "-O 12 " # minimum overlap
         #"-u 9 "
         #"-l 50 "
         #"-m 25 "
         #"-q 15 "
-        "-e 0.2 "
+        "-e 0.2 " # missmatching allowed
         #"--discard-untrimmed "
         "-o {output.trimmed} "
         "{input.fastq} "
@@ -143,6 +144,7 @@ rule ECOLI_Check:
         leftovers="output/03_aligned_bams/{sample}.unaligned.fastq.gz"
     output:
         temp("output/00_ECOLI_check/{sample}.Ecoli.K12.bam"),
+        unaligned = "output/00_ECOLI_check/{sample}.Ecoli.K12.unaligned.fastq.gz"
     log:
         "logs/ecoli_check.{sample}.log"
     threads: 8
@@ -156,6 +158,7 @@ rule ECOLI_Check:
         " --fast "
         "-x {params.ECOLI} "
         "-U {input.leftovers} "
+        "--un-gz {output.unaligned} "
         "> {output} "
         "2> {log}"
 
