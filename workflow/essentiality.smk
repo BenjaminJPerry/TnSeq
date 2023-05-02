@@ -11,7 +11,8 @@
 import os
 
 
-(FIDs,) = glob_wildcards("results/02_kneaddata/{sample}.fastq")
+(SAMPLES,) = glob_wildcards("output/04_aligned_beds/{sample}.bed")
+(REPLICONS,) = glob_wildcards("ref/{replicon}.embl")
 
 
 onstart:
@@ -28,48 +29,19 @@ onstart:
 
 rule all:
     input:
-        "results/centrifuge.counts.tsv",
-        "results/centrifuge.counts.biom",
+        "",
 
-        "results/kraken2.counts.tsv",
-        "results/kraken2.counts.biom",
-
-        "results/bracken.k2.counts.tsv",
-        "results/bracken.k2.counts.biom",
-
-        # expand("results/03_humann3Uniref50EC/{sample}_pathcoverage.tsv", sample=FIDs),
-
-
-localrules:
-    generateCentrifugeSampleSheet,
-
-
-rule generateCentrifugeSampleSheet:
-    output:
-        sampleSheet = "resources/centrifugeSampleSheet.tsv",
-    threads: 2
-    shell:
-        "./workflow/scripts/generate_centrifuge_sample_sheet.sh -d results/02_kneaddata -p fastq -o {output.sampleSheet} "
-
-
-rule centrifugeGTDB:
+rule gene_insertion_table:
     input:
-        sampleSheet = "resources/centrifugeSampleSheet.tsv",
+        aligned_bam="output/03_aligned_bams/{sample}.trimmed.filtered.sorted.bam",
+        aligned_bed="output/04_aligned_beds/{sample}.bed"
     output:
-        out = expand("results/03_centrifuge/{sample}.GTDB.centrifuge", sample = FIDs),
-        report = expand("results/03_centrifuge/{sample}.GTDB.centrifuge.report", sample = FIDs),
+        tradis_insertionplot_semaphore="output/05_tradis_plots/.{sample}"
     log:
-        "logs/centrifuge.GTDB.multi.log",
+        "logs/bed_to_insertionplot.{sample}.log"
+    threads: 2
     conda:
-        "centrifuge"
-    threads: 32
-    resources:
-        mem_gb = lambda wildacards, attempt: 140 + ((attempt - 1) + 20),
-        time = "06:00:00",
+        "envs/insertionPlots.yaml"
     shell:
-        "centrifuge "
-        "-x /bifo/scratch/2022-BJP-GTDB/2022-BJP-GTDB/centrifuge/GTDB "
-        "--sample-sheet {input.sampleSheet} "
-        "-t "
-        "--threads {threads} "
-        "&> {log} "
+        "Rscript workflow/scripts/makeInsertionplots.R {input.aligned_bam} {input.aligned_bed} {wildcards.sample} 2>&1 {log} "
+        "&& touch {output.tradis_insertionplot_semaphore} "
