@@ -49,7 +49,7 @@ rule bbduk:
         'entropy=0.3 '
         'entropywindow=50 '
         'trimpolygright=5 '
-        'qtrim=rl '
+        'qtrim=r '
         'trimq=15 '
         'out={output.bbdukReads} '
         '2>&1 | tee {log}'
