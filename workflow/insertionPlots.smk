@@ -32,34 +32,11 @@ rule all:
         expand("output/00_ECOLI_check/{sample}.Ecoli.K12.bam", sample=SAMPLES)
 
 
-rule bbduk:
+rule cutadapt:
     input:
         reads = 'fastq/{sample}.fastq.gz',
     output:
-        bbdukReads = 'output/01_trimmed_reads/{sample}.bbduk.fastq.gz'
-    log:
-        'logs/bbduk.{sample}.log'
-    conda:
-        'bbduk'
-    threads:4
-    shell:
-        'bbduk.sh '
-        'threads={threads} '
-        'in={input.reads} '
-        'entropy=0.3 '
-        'entropywindow=50 '
-        'trimpolygright=5 '
-        'qtrim=r '
-        'trimq=15 '
-        'out={output.bbdukReads} '
-        '2>&1 | tee {log}'
-
-
-rule cutadapt:
-    input:
-        fastq="output/01_trimmed_reads/{sample}.bbduk.fastq.gz" 
-    output:
-        trimmed="output/01_trimmed_reads/{sample}.bbduk.trimmed.fastq.gz"
+        trimmed="output/01_trimmed_reads/{sample}.trimmed.fastq.gz"
     log:
         "logs/cutadapt.{sample}.log"
     threads: 12
@@ -79,16 +56,40 @@ rule cutadapt:
         "-e 0.2 " # missmatching allowed
         #"--discard-untrimmed "
         "-o {output.trimmed} "
-        "{input.fastq} "
+        "{input.reads} "
         "2>&1 | tee {log}"
+
+
+
+rule bbduk:
+    input:
+        reads="output/01_trimmed_reads/{sample}.trimmed.fastq.gz" 
+    output:
+        bbdukReads = 'output/01_trimmed_reads/{sample}.trimmed.bbduk.fastq.gz'
+    log:
+        'logs/bbduk.{sample}.log'
+    conda:
+        'bbduk'
+    threads:4
+    shell:
+        'bbduk.sh '
+        'threads={threads} '
+        'in={input.reads} '
+        # 'entropy=0.3 '
+        # 'entropywindow=50 '
+        'trimpolygright=5 '
+        'qtrim=r '
+        'trimq=15 '
+        'out={output.bbdukReads} '
+        '2>&1 | tee {log}'
 
 
 rule pJG714_Filter:
     input:
-        trimmed="output/01_trimmed_reads/{sample}.bbduk.trimmed.fastq.gz"
+        trimmed="output/01_trimmed_reads/{sample}.trimmed.bbduk.fastq.gz"
     output:
         pJG714="output/02_pJG714_filtering/{sample}.pJG714.fastq.gz",
-        filtered="output/02_pJG714_filtering/{sample}.bbduk.trimmed.filtered.fastq.gz"
+        filtered="output/02_pJG714_filtering/{sample}.trimmed.bbduk.filtered.fastq.gz"
     log:
         "logs/pJG714_filter.{sample}.log"
     threads: 8
@@ -110,10 +111,10 @@ rule pJG714_Filter:
 
 rule align_tags:
     input:
-        filtered="output/02_pJG714_filtering/{sample}.bbduk.trimmed.filtered.fastq.gz",
+        filtered="output/02_pJG714_filtering/{sample}.trimmed.bbduk.filtered.fastq.gz",
     output:
-        aligned_bam="output/03_aligned_bams/{sample}.bbduk.trimmed.filtered.sorted.bam",
-        aligned_bai="output/03_aligned_bams/{sample}.bbduk.trimmed.filtered.sorted.bam.bai",
+        aligned_bam="output/03_aligned_bams/{sample}.trimmed.bbduk.filtered.sorted.bam",
+        aligned_bai="output/03_aligned_bams/{sample}.trimmed.bbduk.filtered.sorted.bam.bai",
         unaligned="output/03_aligned_bams/{sample}.unaligned.fastq.gz",
     log:
         "logs/tntag_alignment.{sample}.log"
@@ -165,7 +166,7 @@ rule ECOLI_Check:
 
 rule bam_to_bed:
     input:
-        aligned_bam="output/03_aligned_bams/{sample}.bbduk.trimmed.filtered.sorted.bam",
+        aligned_bam="output/03_aligned_bams/{sample}.trimmed.bbduk.filtered.sorted.bam",
     output:
         aligned_bed="output/04_aligned_beds/{sample}.bed"
     log:
@@ -181,7 +182,7 @@ rule bam_to_bed:
 
 rule bed_to_insertionplot:
     input:
-        aligned_bam="output/03_aligned_bams/{sample}.bbduk.trimmed.filtered.sorted.bam",
+        aligned_bam="output/03_aligned_bams/{sample}.trimmed.bbduk.filtered.sorted.bam",
         aligned_bed="output/04_aligned_beds/{sample}.bed"
     output:
         tradis_insertionplot_semaphore="output/05_tradis_plots/.{sample}"
