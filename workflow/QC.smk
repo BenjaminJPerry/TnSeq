@@ -73,10 +73,10 @@ rule fastqc_bbduk:
 
 rule fastqc_trimmed:
     input:
-        fastq = 'output/01_trimmed_reads/{sample}.trimmed.fastq.gz'
+        fastq = 'output/01_trimmed_reads/{sample}.bbduk.trimmed.fastq.gz'
     output:
-        html = 'output/00_QC/fastqc_trimmed/{sample}.trimmed_fastqc.html',
-        zip = 'output/00_QC/fastqc_trimmed/{sample}.trimmed_fastqc.zip'
+        html = 'output/00_QC/fastqc_trimmed/{sample}.bbduk.trimmed_fastqc.html',
+        zip = 'output/00_QC/fastqc_trimmed/{sample}.bbduk.trimmed_fastqc.zip'
     conda:
         'fastqc'
         # 'docker://biocontainers/fastqc:v0.11.9_cv8'
@@ -96,7 +96,7 @@ rule multiQC:
         raw = expand('output/00_QC/fastqc/{sample}_fastqc.zip', sample = SAMPLES),
         bbduk = expand('output/00_QC/fastqc/{sample}.bbduk_fastqc.zip', sample = SAMPLES),
         trimming = expand('logs/cutadapt.{sample}.log', sample = SAMPLES),
-        trimmed = expand('output/00_QC/fastqc_trimmed/{sample}.trimmed_fastqc.zip', sample = SAMPLES),
+        trimmed = expand('output/00_QC/fastqc_trimmed/{sample}.bbduk.trimmed_fastqc.zip', sample = SAMPLES),
         alignment = expand('logs/tntag_alignment.{sample}.log', sample = SAMPLES),
         filtering = expand('logs/pJG714_filter.{sample}.log', sample = SAMPLES),
         ecoli = expand('logs/ecoli_check.{sample}.log', sample = SAMPLES), 
