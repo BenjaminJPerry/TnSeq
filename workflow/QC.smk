@@ -55,8 +55,8 @@ rule fastqc_bbduk:
     input:
         fastq = 'output/01_trimmed_reads/{sample}.bbduk.fastq.gz'
     output:
-        html = 'output/00_QC/fastqc/{sample}.bbduk_fastqc.html',
-        zip = 'output/00_QC/fastqc/{sample}.bbduk_fastqc.zip'
+        html = 'output/00_QC/fastqc_bbduk/{sample}.bbduk_fastqc.html',
+        zip = 'output/00_QC/fastqc_bbduk/{sample}.bbduk_fastqc.zip'
     conda:
         'fastqc'
         # 'docker://biocontainers/fastqc:v0.11.9_cv8'
@@ -94,7 +94,7 @@ rule fastqc_trimmed:
 rule multiQC:
     input:
         raw = expand('output/00_QC/fastqc/{sample}_fastqc.zip', sample = SAMPLES),
-        bbduk = expand('output/00_QC/fastqc/{sample}.bbduk_fastqc.zip', sample = SAMPLES),
+        bbduk = expand('output/00_QC/fastqc_bbduk/{sample}.bbduk_fastqc.zip', sample = SAMPLES),
         trimming = expand('logs/cutadapt.{sample}.log', sample = SAMPLES),
         trimmed = expand('output/00_QC/fastqc_trimmed/{sample}.bbduk.trimmed_fastqc.zip', sample = SAMPLES),
         alignment = expand('logs/tntag_alignment.{sample}.log', sample = SAMPLES),
