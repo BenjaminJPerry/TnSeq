@@ -70,7 +70,7 @@ rule cutadapt:
     shell:
         "cutadapt "
         "-j {threads} "
-        #"-g {params.IR} "
+        "-g {params.IR} "
         "-u 9 "
         "-l 50 "
         "-m 25 "
