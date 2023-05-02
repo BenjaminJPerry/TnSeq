@@ -94,7 +94,7 @@ rule fastqc_trimmed:
 rule multiQC:
     input:
         raw = expand('output/00_QC/fastqc/{sample}_fastqc.zip', sample = SAMPLES),
-        bbduk = expand('TnSeq/logs/bbduk.{sample}.log', sample = SAMPLES),
+        bbduk = expand('logs/bbduk.{sample}.log', sample = SAMPLES),
         bbduk_reads = expand('output/00_QC/fastqc_bbduk/{sample}.bbduk_fastqc.zip', sample = SAMPLES),
         trimming = expand('logs/cutadapt.{sample}.log', sample = SAMPLES),
         trimmed = expand('output/00_QC/fastqc_trimmed/{sample}.bbduk.trimmed_fastqc.zip', sample = SAMPLES),

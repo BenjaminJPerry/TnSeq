@@ -24,9 +24,10 @@ make_wig <- function( repliconBed, strand="all", min_count=1, capping=T ){
   if ( length(unique(repliconBed$Chrom)) > 1 ){
     stop("'repliconBed' contains multiple replicons.")
   }
-  
+  write( paste("Making wig for:", replicon, "...\n", sep = " "), stdout() )
+
   replicon <- as.character(unique(repliconBed$Chrom))
-  write( paste("Total Reads in", replicon, ":", length(repliconBed$Chrom), "\n"), stdout())
+  write( paste("Total Reads in", replicon, ":", length(repliconBed$Chrom), "\n", sep = " "), stdout() )
 
   #filter the replicon bed file for the indicated strand.
   if ( !(strand %in% c("-", "+", "all")) ){
