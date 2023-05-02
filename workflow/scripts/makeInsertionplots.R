@@ -336,7 +336,7 @@ for(i in 1:nrow(replicons)) {
   cat(headerLine, file = pWigOut, sep = "\n", append = T)
   
   write_delim(x = plusWig,
-              file = pWigOut,
+              path = pWigOut,
               delim = " ",
               col_names = F,
               append = T)
@@ -354,7 +354,7 @@ for(i in 1:nrow(replicons)) {
       append = T)
   
   write_delim(x = minusWig,
-              file = mWigOut,
+              path = mWigOut,
               delim = " ",
               col_names = F,
               append = T)
@@ -372,7 +372,7 @@ for(i in 1:nrow(replicons)) {
       append = T)
   
   write_delim(x = allWig,
-              file = filtWigOut,
+              path = filtWigOut,
               delim = " ",
               col_names = F,
               append = T)
