@@ -1,10 +1,8 @@
-name: /home/perrybe/conda-envs/bedtools
+name: bedtools
 channels:
   - defaults
   - conda-forge
   - bioconda
-  - file://bifo/support/admin/conda/agr-nonfree
-  - agresearch
   - r
 dependencies:
   - _libgcc_mutex=0.1=main
@@ -17,4 +15,4 @@ dependencies:
   - libzlib=1.2.11=h166bdaf_1014
   - xz=5.2.10=h5eee18b_1
   - zlib=1.2.11=h166bdaf_1014
-prefix: /home/perrybe/conda-envs/bedtools
+prefix: bedtools

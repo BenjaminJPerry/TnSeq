@@ -1,10 +1,8 @@
-name: /home/perrybe/conda-envs/bowtie2
+name: bowtie2
 channels:
   - defaults
   - conda-forge
   - bioconda
-  - file://bifo/support/admin/conda/agr-nonfree
-  - agresearch
   - r
 dependencies:
   - _libgcc_mutex=0.1=conda_forge
@@ -46,4 +44,4 @@ dependencies:
   - xz=5.2.10=h5eee18b_1
   - zlib=1.2.13=h166bdaf_4
   - zstd=1.5.2=h6239696_4
-prefix: /home/perrybe/conda-envs/bowtie2
+prefix: bowtie2

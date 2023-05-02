@@ -1,1 +1,5 @@
-# Snakemake pipeline for tn5 Tnseq data analysis with tn5 data
+# Snakemake pipeline for Tnseq bioinformatics
+
+## Setup
+
+
