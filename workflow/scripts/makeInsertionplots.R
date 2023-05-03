@@ -27,6 +27,7 @@ make_wig <- function( repliconBed, strand="all", min_count=1, capping=T ){
   write( paste("Making wig for:", replicon, "...\n", sep = " "), stdout() )
 
   replicon <- as.character(unique(repliconBed$Chrom))
+
   write( paste("Total Reads in", replicon, ":", length(repliconBed$Chrom), "\n", sep = " "), stdout() )
 
   #filter the replicon bed file for the indicated strand.

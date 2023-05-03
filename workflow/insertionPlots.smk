@@ -50,7 +50,7 @@ rule cutadapt:
         "-g {params.IR} " #5' clip
         "-O 12 " # minimum overlap
         #"-u 9 "
-        #"-l 50 "
+        "-l 50 "
         #"-m 25 "
         #"-q 15 "
         "-e 0.2 " # missmatching allowed
@@ -75,11 +75,11 @@ rule bbduk:
         'bbduk.sh '
         'threads={threads} '
         'in={input.reads} '
-        # 'entropy=0.3 '
-        # 'entropywindow=50 '
+        'entropy=0.3 '
+        'entropywindow=50 '
         'trimpolygright=5 '
         'qtrim=r '
-        'trimq=15 '
+        'trimq=20 '
         'out={output.bbdukReads} '
         '2>&1 | tee {log}'
 
