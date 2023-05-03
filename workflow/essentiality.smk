@@ -10,9 +10,13 @@
 
 import os
 
+wildcard_constraints:
+   sample = '\w+',
+
 
 (SAMPLES,) = glob_wildcards("output/04_aligned_beds/{sample}.bed")
-(REPLICONS,) = glob_wildcards("ref/{replicon}.embl")
+
+(REPLICONS,) = glob_wildcards("ref/embl/{replicon}.embl")
 
 
 onstart:
@@ -29,19 +33,41 @@ onstart:
 
 rule all:
     input:
-        "",
+        expand("output/07_tradis_output/{sample}.{replicon}.tradis_gene_insert_sites.tsv.essen.csv", sample = SAMPLES, replicon = REPLICONS),
 
-rule gene_insertion_table:
+rule gene_insertions:
     input:
-        aligned_bam="output/03_aligned_bams/{sample}.trimmed.filtered.sorted.bam",
-        aligned_bed="output/04_aligned_beds/{sample}.bed"
+        annotation="ref/embl/{replicon}.embl",
+        insertions="output/05_tradis_plots/{sample}.{replicon}.insert_site_plot.gz"
     output:
-        tradis_insertionplot_semaphore="output/05_tradis_plots/.{sample}"
+        tradis_gene_counts="output/07_tradis_output/{sample}.{replicon}.tradis_gene_insert_sites.tsv"
     log:
-        "logs/bed_to_insertionplot.{sample}.log"
+        "logs/tradis_gene_insert_sites.{sample}.{replicon}.log"
     threads: 2
     conda:
-        "envs/insertionPlots.yaml"
+        "tradis"
     shell:
-        "Rscript workflow/scripts/makeInsertionplots.R {input.aligned_bam} {input.aligned_bed} {wildcards.sample} 2>&1 {log} "
-        "&& touch {output.tradis_insertionplot_semaphore} "
+        "tradis_gene_insert_sites "
+        #"-o {wildcards.sample}.{wildcards.replicon}.tradis_gene_insert_sites.csv "
+        "-trim5 0.1 "
+        "-trim3 0.1 "
+        "{input.annotation} "
+        "{input.insertions} "
+        "&& " # JANKY because tradis made me do it...
+        "mv {wildcards.sample}.{wildcards.replicon}.tradis_gene_insert_sites.csv {output.tradis_gene_counts} "
+
+rule gene_essentiality:
+    input:
+        tradis_gene_counts="output/07_tradis_output/{sample}.{replicon}.tradis_gene_insert_sites.tsv",
+    output:
+        states = "output/07_tradis_output/{sample}.{replicon}.tradis_gene_insert_sites.tsv.all.csv",
+        ambiguous = "output/07_tradis_output/{sample}.{replicon}.tradis_gene_insert_sites.tsv.ambig.csv",
+        essential = "output/07_tradis_output/{sample}.{replicon}.tradis_gene_insert_sites.tsv.essen.csv",
+        change_point_plot = "output/07_tradis_output/{sample}.{replicon}.tradis_gene_insert_sites.tsv.QC_and_changepoint_plots.pdf",
+    log:
+        "logs/tradis_gene_insert_sites.{sample}.{replicon}.log"
+    threads: 2
+    conda:
+        "tradis"
+    shell:
+        "tradis_essentiality.R {input.tradis_gene_counts}"
