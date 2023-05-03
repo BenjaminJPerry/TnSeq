@@ -53,10 +53,10 @@ rule fastqc_raw:
 
 rule fastqc_bbduk:
     input:
-        fastq = 'output/01_trimmed_reads/{sample}.bbduk.fastq.gz'
+        fastq = 'output/01_trimmed_reads/{sample}.trimmed.bbduk.fastq.gz'
     output:
-        html = 'output/00_QC/fastqc_bbduk/{sample}.bbduk_fastqc.html',
-        zip = 'output/00_QC/fastqc_bbduk/{sample}.bbduk_fastqc.zip'
+        html = 'output/00_QC/fastqc_bbduk/{sample}.trimmed.bbduk_fastqc.html',
+        zip = 'output/00_QC/fastqc_bbduk/{sample}.trimmed.bbduk_fastqc.zip'
     conda:
         'fastqc'
         # 'docker://biocontainers/fastqc:v0.11.9_cv8'
@@ -73,10 +73,10 @@ rule fastqc_bbduk:
 
 rule fastqc_trimmed:
     input:
-        fastq = 'output/01_trimmed_reads/{sample}.trimmed.bbduk.fastq.gz'
+        fastq = 'output/01_trimmed_reads/{sample}.trimmed.fastq.gz'
     output:
-        html = 'output/00_QC/fastqc_trimmed/{sample}.trimmed.bbduk_fastqc.html',
-        zip = 'output/00_QC/fastqc_trimmed/{sample}.trimmed.bbduk_fastqc.zip'
+        html = 'output/00_QC/fastqc_trimmed/{sample}.trimmed_fastqc.html',
+        zip = 'output/00_QC/fastqc_trimmed/{sample}.trimmed_fastqc.zip'
     conda:
         'fastqc'
         # 'docker://biocontainers/fastqc:v0.11.9_cv8'
@@ -94,10 +94,10 @@ rule fastqc_trimmed:
 rule multiQC:
     input:
         raw = expand('output/00_QC/fastqc/{sample}_fastqc.zip', sample = SAMPLES),
-        bbduk = expand('logs/bbduk.{sample}.log', sample = SAMPLES),
-        bbduk_reads = expand('output/00_QC/fastqc_bbduk/{sample}.bbduk_fastqc.zip', sample = SAMPLES),
         trimming = expand('logs/cutadapt.{sample}.log', sample = SAMPLES),
-        trimmed = expand('output/00_QC/fastqc_trimmed/{sample}.trimmed.bbduk_fastqc.zip', sample = SAMPLES),
+        trimmed = expand('output/00_QC/fastqc_trimmed/{sample}.trimmed_fastqc.zip', sample = SAMPLES),
+        bbduk = expand('logs/bbduk.{sample}.log', sample = SAMPLES),
+        bbduk_reads = expand('output/00_QC/fastqc_bbduk/{sample}.trimmed.bbduk_fastqc.zip', sample = SAMPLES),
         alignment = expand('logs/tntag_alignment.{sample}.log', sample = SAMPLES),
         filtering = expand('logs/pJG714_filter.{sample}.log', sample = SAMPLES),
         ecoli = expand('logs/ecoli_check.{sample}.log', sample = SAMPLES), 
@@ -113,5 +113,5 @@ rule multiQC:
         '-s '
         '-f '
         '--interactive '
-        '{input.raw} {input.trimming} {input.trimmed} {input.alignment} {input.filtering} {input.ecoli} '
+        '{input.raw} {input.trimming} {input.trimmed} {input.bbduk} {input.bbduk_reads} {input.alignment} {input.filtering} {input.ecoli} '
 
